@@ -25,4 +25,4 @@ jobs:
   phpstan:
     uses: yii2-framework/actions/.github/workflows/phpstan.yml@v1
     with:
-      extensions: 'grpc'
+      extensions: 'grpc, protobuf'
