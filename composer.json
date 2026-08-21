@@ -1,19 +1,22 @@
 {
-    "name": "s1lver/yii2-etcd",
+    "name": "yii2-extensions/etcd",
     "description": "Yii2 etcd component",
     "type": "yii2-extension",
     "license": "BSD-3-Clause",
     "minimum-stability": "dev",
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.5",
         "ext-curl": "*",
         "guzzlehttp/guzzle": "^8.0.1",
         "grpc/grpc": "^1.42.0",
         "google/protobuf": "^v5.34.1",
-        "yiisoft/yii2": "^2.0.54"
+        "yiisoft/yii2": "^2.0.55"
     },
     "require-dev": {
-        "roave/security-advisories": "dev-latest"
+        "yiisoft/yii2-coding-standards": "^3.0",
+        "phpunit/phpunit": "^13.1.0",
+        "phpstan/phpstan": "^2.2",
+        "phpstan/phpstan-phpunit": "^2.0"
     },
     "suggest": {
         "ext-grpc": "Needed for the grpc protocol to work"
@@ -26,7 +29,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "S1lver\\Etcd\\": "src",
+            "Yii2\\Extensions\\Etcd\\": "src",
             "Etcd\\": "src/RPC/Etcd",
             "GPBMetadata\\Proto\\": [
                 "src/RPC/GPBMetadata/Proto"
@@ -35,7 +38,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-          "S1lver\\Etcd\\Tests\\": "tests"
+            "Yii2\\Extensions\\Etcd\\Tests\\": "tests"
         }
     },
     "config": {
