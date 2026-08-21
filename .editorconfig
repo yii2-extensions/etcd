@@ -13,5 +13,16 @@ trim_trailing_whitespace = true
 [*.md]
 trim_trailing_whitespace = false
 
-[*.yml]
+[*.php]
+ij_php_space_before_short_closure_left_parenthesis = false
+ij_php_space_after_type_cast = true
+
+[{*.yml, *.yaml}]
 indent_size = 2
+
+[*.xml.dist]
+indent_size = 2
+
+[LICENSE*]
+indent_style = unset
+indent_size = unset

@@ -7,4 +7,5 @@ namespace Yii2\Extensions\Etcd\Exceptions;
 use Exception;
 
 class EtcdException extends Exception
-{}
+{
+}

@@ -14,6 +14,7 @@ use Yii2\Extensions\Etcd\EtcdServiceInterface;
 use Yii2\Extensions\Etcd\Exceptions\EtcdException;
 use Yii2\Extensions\Etcd\Services\EtcdAuthGrpc;
 use Yii2\Extensions\Etcd\Services\EtcdAuthInterface;
+
 use const Grpc\STATUS_OK;
 
 class EtcdGrpcModel implements EtcdServiceInterface
@@ -68,7 +69,7 @@ class EtcdGrpcModel implements EtcdServiceInterface
         [$response, $status] = $this->client->Range($request)->wait();
 
         if (STATUS_OK !== $status->code) {
-            throw new EtcdException('Errors: '.$status->details);
+            throw new EtcdException('Errors: ' . $status->details);
         }
 
         return new RangeResponse($this->collectKvs($response->getKvs()));
@@ -83,7 +84,7 @@ class EtcdGrpcModel implements EtcdServiceInterface
         [$response, $status] = $this->client->Range($request)->wait();
 
         if (STATUS_OK !== $status->code) {
-            throw new EtcdException('Errors: '.$status->details);
+            throw new EtcdException('Errors: ' . $status->details);
         }
 
         return new RangeResponse($this->collectKvs($response->getKvs()));

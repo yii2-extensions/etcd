@@ -9,6 +9,9 @@
   <file>src</file>
   <file>tests</file>
 
+  <exclude-pattern>/src/RPC/Etcd/*</exclude-pattern>
+  <exclude-pattern>/src/RPC/GPBMetadata/*</exclude-pattern>
+
   <rule ref="Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore">
     <exclude-pattern>*\.php$</exclude-pattern>
   </rule>
