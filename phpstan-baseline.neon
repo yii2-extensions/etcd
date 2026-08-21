@@ -101,3 +101,9 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Rest/RangeResponse.php
+
+		-
+			message: '#^Method Yii2\\Extensions\\Etcd\\Tests\\EtcdHttpTest\:\:putDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/EtcdHttpTest.php
