@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace S1lver\Etcd\Rest;
+namespace Yii2\Extensions\Etcd\Rest;
 
 use yii\base\BaseObject;
 

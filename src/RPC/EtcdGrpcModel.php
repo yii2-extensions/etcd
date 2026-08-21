@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace S1lver\Etcd\RPC;
+namespace Yii2\Extensions\Etcd\RPC;
 
 use Etcd\KeyValue;
 use Etcd\KVClient;
@@ -10,10 +10,10 @@ use Etcd\PutRequest;
 use Etcd\RangeRequest;
 use Google\Protobuf\Internal\RepeatedField;
 use Grpc\ChannelCredentials;
-use S1lver\Etcd\EtcdServiceInterface;
-use S1lver\Etcd\Exceptions\EtcdException;
-use S1lver\Etcd\Services\EtcdAuthGrpc;
-use S1lver\Etcd\Services\EtcdAuthInterface;
+use Yii2\Extensions\Etcd\EtcdServiceInterface;
+use Yii2\Extensions\Etcd\Exceptions\EtcdException;
+use Yii2\Extensions\Etcd\Services\EtcdAuthGrpc;
+use Yii2\Extensions\Etcd\Services\EtcdAuthInterface;
 use const Grpc\STATUS_OK;
 
 class EtcdGrpcModel implements EtcdServiceInterface

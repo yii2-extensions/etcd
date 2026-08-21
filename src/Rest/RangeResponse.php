@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace S1lver\Etcd\Rest;
+namespace Yii2\Extensions\Etcd\Rest;
 
-use S1lver\Etcd\EtcdRangeResponseInterface;
+use Yii2\Extensions\Etcd\EtcdRangeResponseInterface;
 use yii\base\BaseObject;
 
 /**

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace S1lver\Etcd;
+namespace Yii2\Extensions\Etcd;
 
-use S1lver\Etcd\Rest\EtcdRestModel;
-use S1lver\Etcd\RPC\EtcdGrpcModel;
-use S1lver\Etcd\Services\EtcdAuthInterface;
+use Yii2\Extensions\Etcd\Rest\EtcdRestModel;
+use Yii2\Extensions\Etcd\RPC\EtcdGrpcModel;
+use Yii2\Extensions\Etcd\Services\EtcdAuthInterface;
 use yii\base\Component;
 
 /**

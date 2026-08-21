@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace S1lver\Etcd;
+namespace Yii2\Extensions\Etcd;
 
-use S1lver\Etcd\Services\EtcdAuthInterface;
+use Yii2\Extensions\Etcd\Services\EtcdAuthInterface;
 
 interface EtcdServiceInterface
 {

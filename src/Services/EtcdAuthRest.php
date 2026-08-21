@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace S1lver\Etcd\Services;
+namespace Yii2\Extensions\Etcd\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use JsonException;
-use S1lver\Etcd\EtcdEndpoint;
-use S1lver\Etcd\Rest\AuthenticateResponse;
+use Yii2\Extensions\Etcd\EtcdEndpoint;
+use Yii2\Extensions\Etcd\Rest\AuthenticateResponse;
 use Yii;
 
 class EtcdAuthRest implements EtcdAuthInterface
@@ -39,7 +39,7 @@ class EtcdAuthRest implements EtcdAuthInterface
 
         try {
             $response = $this->client->post(
-                $this->host.EtcdEndpoint::ETCD_VERSION.EtcdEndpoint::AUTHENTICATE,
+                $this->host . EtcdEndpoint::ETCD_VERSION . EtcdEndpoint::AUTHENTICATE,
                 [
                     RequestOptions::BODY => json_encode(
                         ['name' => $this->user, 'password' => $this->password],

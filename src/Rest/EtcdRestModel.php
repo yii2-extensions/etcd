@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace S1lver\Etcd\Rest;
+namespace Yii2\Extensions\Etcd\Rest;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
-use S1lver\Etcd\EtcdEndpoint;
-use S1lver\Etcd\EtcdServiceInterface;
-use S1lver\Etcd\Services\EtcdAuthInterface;
-use S1lver\Etcd\Services\EtcdAuthRest;
+use Yii2\Extensions\Etcd\EtcdEndpoint;
+use Yii2\Extensions\Etcd\EtcdServiceInterface;
+use Yii2\Extensions\Etcd\Services\EtcdAuthInterface;
+use Yii2\Extensions\Etcd\Services\EtcdAuthRest;
 use JsonException;
 
 class EtcdRestModel implements EtcdServiceInterface
@@ -40,7 +40,7 @@ class EtcdRestModel implements EtcdServiceInterface
             RequestOptions::BODY => json_encode(['key' => trim(base64_encode($key))], JSON_THROW_ON_ERROR),
         ];
         $response = $this->client->post(
-            $this->host.EtcdEndpoint::ETCD_VERSION.EtcdEndpoint::RANGE,
+            $this->host . EtcdEndpoint::ETCD_VERSION . EtcdEndpoint::RANGE,
             array_merge($options, $this->getTokenOptions())
         );
 
@@ -65,7 +65,7 @@ class EtcdRestModel implements EtcdServiceInterface
         ];
 
         $response = $this->client->post(
-            $this->host.EtcdEndpoint::ETCD_VERSION.EtcdEndpoint::RANGE,
+            $this->host . EtcdEndpoint::ETCD_VERSION . EtcdEndpoint::RANGE,
             array_merge($options, $this->getTokenOptions())
         );
 
@@ -81,7 +81,7 @@ class EtcdRestModel implements EtcdServiceInterface
             ),
         ];
         $response = $this->client->post(
-            $this->host.EtcdEndpoint::ETCD_VERSION.EtcdEndpoint::PUT,
+            $this->host . EtcdEndpoint::ETCD_VERSION . EtcdEndpoint::PUT,
             array_merge($options, $this->getTokenOptions())
         );
 
@@ -94,7 +94,7 @@ class EtcdRestModel implements EtcdServiceInterface
      */
     public function getVersion(): string
     {
-        $response = $this->client->get($this->host.EtcdEndpoint::VERSION);
+        $response = $this->client->get($this->host . EtcdEndpoint::VERSION);
 
         return $response->getBody()->getContents();
     }
@@ -107,8 +107,8 @@ class EtcdRestModel implements EtcdServiceInterface
         $token = $this->getAuthModel()->authenticate();
 
         return empty($token)
-            ?[]
-            :[
+            ? []
+            : [
                 RequestOptions::HEADERS => ['Authorization' => $token],
             ];
     }

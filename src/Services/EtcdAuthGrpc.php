@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace S1lver\Etcd\Services;
+namespace Yii2\Extensions\Etcd\Services;
 
 use Etcd\AuthClient;
 use Etcd\AuthenticateRequest;
 use Etcd\AuthenticateResponse;
 use Grpc\ChannelCredentials;
-use S1lver\Etcd\Exceptions\EtcdException;
+use Yii2\Extensions\Etcd\Exceptions\EtcdException;
+
 use const Grpc\STATUS_OK;
 
 class EtcdAuthGrpc implements EtcdAuthInterface
@@ -38,7 +39,7 @@ class EtcdAuthGrpc implements EtcdAuthInterface
         [$response, $status] = $this->client->Authenticate($request)->wait();
 
         if (STATUS_OK !== $status->code) {
-            throw new EtcdException('Errors: '.$status->details);
+            throw new EtcdException('Errors: ' . $status->details);
         }
 
         return $response->getToken();

@@ -2,8 +2,9 @@
 
 ## 2.0.0 (in developing)
 
-- Minimum `PHP` version raised to `8.5` (@s1lver)
-- Minimum `Yii2` version raised to `2.0.55` (@s1lver)
+- Enh: Minimum `PHP` version raised to `8.5` (@s1lver)
+- Enh: Minimum `Yii2` version raised to `2.0.55` (@s1lver)
+- Chg: Change namespace from `S1lver\Etcd` to `Yii2\Extensions\Etcd` (@s1lver)
 
 
 ## 1.1.0 (2023-05-25)
