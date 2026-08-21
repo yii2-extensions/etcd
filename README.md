@@ -1,11 +1,27 @@
-# Yii2 etcd component
+<!-- markdownlint-disable MD041 -->
+<p align="center">
+    <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://www.yiiframework.com/image/design/logo/yii3_full_for_dark.svg">
+        <source media="(prefers-color-scheme: light)" srcset="https://www.yiiframework.com/image/design/logo/yii3_full_for_light.svg">
+        <img src="https://www.yiiframework.com/image/design/logo/yii3_full_for_dark.svg" alt="Yii Framework" width="80%">
+    </picture>
+    <h1 align="center">etcd</h1>
+    <br>
+</p>
+<!-- markdownlint-enable MD041 -->
 
-[![Latest Stable Version](https://poser.pugx.org/s1lver/yii2-etcd/v/stable.svg)](https://packagist.org/packages/s1lver/yii2-etcd)
-[![Total Downloads](http://poser.pugx.org/s1lver/yii2-etcd/downloads)](https://packagist.org/packages/s1lver/yii2-etcd)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=s1lver_yii2-etcd&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=s1lver_yii2-etcd)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=s1lver_yii2-etcd&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=s1lver_yii2-etcd)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=s1lver_yii2-etcd&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=s1lver_yii2-etcd)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=s1lver_yii2-etcd&metric=coverage)](https://sonarcloud.io/summary/new_code?id=s1lver_yii2-etcd)
+<p align="center">
+    <a href="https://github.com/yii2-extensions/etcd/actions/workflows/build.yml" target="_blank">
+        <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/etcd/build.yml?style=for-the-badge&logo=github&label=PHPUnit" alt="PHPUnit">
+    </a>
+    <a href="https://codecov.io/github/yii2-extensions/etcd" target="_blank">
+        <img src="https://img.shields.io/codecov/c/github/yii2-extensions/etcd.svg?style=for-the-badge&logo=codecov&logoColor=white&label=Coverage" alt="CodeCoverage">
+    </a>
+    <a href="https://github.com/yii2-extensions/etcd/actions/workflows/static.yml" target="_blank">
+        <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/etcd/static.yml?style=for-the-badge&logo=github&label=PHPStan" alt="PHPStan">
+    </a>
+</p>
+
 
 Interaction component with `etcd` (A distributed, reliable key-value store for the most critical data of a distributed system) for `Yii2 Framework`.
 
