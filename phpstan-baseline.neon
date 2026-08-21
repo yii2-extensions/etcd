@@ -1,0 +1,103 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Class Yii2\\Extensions\\Etcd\\Etcd has PHPDoc tag @property\-read for property \$tokenOptions with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Etcd.php
+
+		-
+			message: '#^Property Yii2\\Extensions\\Etcd\\Etcd\:\:\$clientOptions type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Etcd.php
+
+		-
+			message: '#^Property Yii2\\Extensions\\Etcd\\Etcd\:\:\$protocolList type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Etcd.php
+
+		-
+			message: '#^Property Yii2\\Extensions\\Etcd\\Etcd\:\:\$service \(Yii2\\Extensions\\Etcd\\EtcdServiceInterface\) does not accept object\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Etcd.php
+
+		-
+			message: '#^Method Yii2\\Extensions\\Etcd\\RPC\\EtcdGrpcModel\:\:__construct\(\) has parameter \$clientOptions with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/RPC/EtcdGrpcModel.php
+
+		-
+			message: '#^Method Yii2\\Extensions\\Etcd\\RPC\\EtcdGrpcModel\:\:collectKvs\(\) has parameter \$fields with generic class Google\\Protobuf\\RepeatedField but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/RPC/EtcdGrpcModel.php
+
+		-
+			message: '#^Method Yii2\\Extensions\\Etcd\\RPC\\EtcdGrpcModel\:\:collectKvs\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/RPC/EtcdGrpcModel.php
+
+		-
+			message: '#^Property Yii2\\Extensions\\Etcd\\RPC\\EtcdGrpcModel\:\:\$clientOptions type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/RPC/EtcdGrpcModel.php
+
+		-
+			message: '#^Property Yii2\\Extensions\\Etcd\\RPC\\EtcdGrpcModel\:\:\$metadata type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/RPC/EtcdGrpcModel.php
+
+		-
+			message: '#^Property Yii2\\Extensions\\Etcd\\RPC\\RangeResponse\:\:\$header type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/RPC/RangeResponse.php
+
+		-
+			message: '#^Property Yii2\\Extensions\\Etcd\\RPC\\RangeResponse\:\:\$kvs type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/RPC/RangeResponse.php
+
+		-
+			message: '#^Property Yii2\\Extensions\\Etcd\\Rest\\AuthenticateResponse\:\:\$header type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Rest/AuthenticateResponse.php
+
+		-
+			message: '#^Method Yii2\\Extensions\\Etcd\\Rest\\EtcdRestModel\:\:__construct\(\) has parameter \$clientOptions with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Rest/EtcdRestModel.php
+
+		-
+			message: '#^Method Yii2\\Extensions\\Etcd\\Rest\\EtcdRestModel\:\:getTokenOptions\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Rest/EtcdRestModel.php
+
+		-
+			message: '#^Parameter \#2 \$options of method GuzzleHttp\\Client\:\:post\(\) expects array\{base_uri\?\: Psr\\Http\\Message\\UriInterface\|string, allow_redirects\?\: array\{max\?\: int, strict\?\: bool, referer\?\: bool, protocols\?\: non\-empty\-array\<string\>, on_redirect\?\: callable\(Psr\\Http\\Message\\RequestInterface, Psr\\Http\\Message\\ResponseInterface, Psr\\Http\\Message\\UriInterface\)\: mixed, track_redirects\?\: bool\}\|bool, auth\?\: array\{0\: string, 1\: string, 2\?\: string\|null\}\|string\|false\|null, body\?\: callable\-object\|Iterator\|resource\|string\|Stringable\|null, cert\?\: array\{0\: string, 1\?\: string\|null\}\|string, cert_type\?\: string, connect_timeout\?\: float\|int, cookies\?\: GuzzleHttp\\Cookie\\CookieJarInterface\|false, \.\.\., \.\.\.\}, non\-empty\-array\<array\|non\-empty\-string\> given\.$#'
+			identifier: argument.type
+			count: 3
+			path: src/Rest/EtcdRestModel.php
+
+		-
+			message: '#^Property Yii2\\Extensions\\Etcd\\Rest\\RangeResponse\:\:\$header type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Rest/RangeResponse.php
+
+		-
+			message: '#^Property Yii2\\Extensions\\Etcd\\Rest\\RangeResponse\:\:\$kvs type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Rest/RangeResponse.php

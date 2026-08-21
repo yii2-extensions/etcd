@@ -49,9 +49,9 @@ class EtcdAuthRest implements EtcdAuthInterface
             );
             $content = $response->getBody()->getContents();
         } catch (ClientException $exception) {
-            Yii::warning($exception);
+            Yii::warning($exception->getMessage());
         }
 
-        return (new AuthenticateResponse(json_decode($content, true, 512, JSON_THROW_ON_ERROR)))->token;
+        return new AuthenticateResponse(json_decode($content, true, 512, JSON_THROW_ON_ERROR))->token;
     }
 }

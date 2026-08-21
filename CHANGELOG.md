@@ -6,6 +6,7 @@
 - Enh: Minimum `Yii2` version raised to `2.0.55` (@s1lver)
 - Chg: Change namespace from `S1lver\Etcd` to `Yii2\Extensions\Etcd` (@s1lver)
 - Enh: Applying Yii2 coding standards (@s1lver)
+- Enh: Static analysis with PHPStan has been added (@s1lver)
 
 
 ## 1.1.0 (2023-05-25)
