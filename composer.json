@@ -8,9 +8,9 @@
         "php": ">=8.5",
         "ext-curl": "*",
         "ext-grpc": "*",
-        "guzzlehttp/guzzle": "^8.0.1",
-        "grpc/grpc": "^1.42.0",
-        "google/protobuf": "^v5.34.1",
+        "guzzlehttp/guzzle": "^8.0",
+        "grpc/grpc": "^1.82.0",
+        "google/protobuf": "^v5.36.0",
         "yiisoft/yii2": "^2.0.55"
     },
     "require-dev": {

@@ -1,3 +1,4 @@
 .idea
+.opencode
 vendor
 composer.lock

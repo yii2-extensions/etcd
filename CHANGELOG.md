@@ -6,7 +6,10 @@
 - Enh: Minimum `Yii2` version raised to `2.0.55` (@s1lver)
 - Chg: Change namespace from `S1lver\Etcd` to `Yii2\Extensions\Etcd` (@s1lver)
 - Enh: Applying Yii2 coding standards (@s1lver)
-- Enh: Static analysis with PHPStan has been added (@s1lver)
+- Enh #11: Static analysis with PHPStan has been added (@s1lver)
+- Enh: Minimum `grpc/grpc` version raised to `1.82` (@s1lver)
+- Enh: Minimum `google/protobuf` version raised to `5.36` (@s1lver)
+- Enh: Minimum `guzzlehttp/guzzle` version raised to `8.0` (@s1lver)
 
 
 ## 1.1.0 (2023-05-25)
