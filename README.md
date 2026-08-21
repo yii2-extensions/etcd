@@ -29,19 +29,19 @@ https://etcd.io
 
 ## Required
 
-- PHP: >= 8.2
+- PHP: >= 8.5
 - `grpc`, `protobuf` - for RPC
 
 ## Install
 
 ```bash
-composer require s1lver/yii2-etcd "^1.0.0"
+composer require yii2-extensions/etcd "^2.0.0"
 ```
 
 or add
 
 ```
-"s1lver/yii2-etcd": "^1.0.0"
+"yii2-extensions/etcd": "^2.0.0"
 ```
 
 to the require section of your composer.json file.
@@ -71,7 +71,7 @@ Configure
 $config = [
     'components' => [
         'etcd' => [
-            'class' => \S1lver\Etcd\Etcd::class,
+            'class' => \Yii2\Extensions\Etcd::class,
             'host' => 'etcd:2379',
             'user' => 'username',
             'password' => 'password',
@@ -104,9 +104,9 @@ Yii::$app->etcd->version;
 $config = [
     'components' => [
         'etcd' => [
-            'class' => \S1lver\Etcd\Etcd::class,
+            'class' => \Yii2\Extensions\Etcd\Etcd::class,
             ...
-            'protocol' => '\S1lver\Etcd\EtcdProtocol::GRPC', // Default value \S1lver\Etcd\EtcdProtocol::HTTP
+            'protocol' => '\Yii2\Extensions\Etcd\EtcdProtocol::GRPC', // Default value \Yii2\Extensions\Etcd\EtcdProtocol::HTTP
         ],
     ],
 ];
