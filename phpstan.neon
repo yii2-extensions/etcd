@@ -15,6 +15,8 @@ parameters:
     - support/ide-helper.php
   excludePaths:
     - vendor
+    - src/RPC/Etcd
+    - src/RPC/GPBMetadata
   paths:
     - src
     - tests

@@ -9,7 +9,7 @@ namespace Yii2\Extensions\Etcd;
  */
 final class EtcdProtocol
 {
-    public const HTTP = 'http';
+    public const string HTTP = 'http';
 
-    public const GRPC = 'grpc';
+    public const string GRPC = 'grpc';
 }
