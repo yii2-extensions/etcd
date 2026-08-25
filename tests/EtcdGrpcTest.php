@@ -12,7 +12,7 @@ final class EtcdGrpcTest extends TestCase
 {
     public function testVersion(): void
     {
-        $etcd = new Etcd(['host' => 'etcd:2379', 'protocol' => EtcdProtocol::GRPC]);
+        $etcd = new Etcd(['host' => ETCD_HOST, 'protocol' => EtcdProtocol::GRPC]);
 
         self::assertEquals('Not supported', $etcd->version);
     }

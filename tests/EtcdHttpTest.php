@@ -20,7 +20,7 @@ final class EtcdHttpTest extends TestCase
 
     public function testVersion(): void
     {
-        $etcd = new Etcd(['host' => 'etcd:2379']);
+        $etcd = new Etcd(['host' => ETCD_HOST]);
         $version = json_decode($etcd->version, true, 512, JSON_THROW_ON_ERROR);
 
         self::assertArrayHasKey('etcdserver', $version);
@@ -31,7 +31,7 @@ final class EtcdHttpTest extends TestCase
     #[DataProvider('putDataProvider')]
     public function testPut(string $key, string $value): void
     {
-        $etcd = new Etcd(['host' => 'etcd:2379']);
+        $etcd = new Etcd(['host' => ETCD_HOST]);
         $etcd->put($key, $value);
 
         self::assertEquals($value, $etcd->getKey($key)->getFirstKeyValue());

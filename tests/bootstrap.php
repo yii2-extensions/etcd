@@ -15,6 +15,8 @@ require_once __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
 
 Yii::setAlias('@tests', __DIR__);
 
+define('ETCD_HOST', getenv('ETCD_HOST') ?: 'etcd:2379');
+
 new \yii\console\Application([
     'id' => 'setcd-tests',
     'basePath' => __DIR__,
