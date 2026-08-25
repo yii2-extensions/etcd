@@ -26,5 +26,33 @@ jobs:
     with:
       php-version: '["8.5"]'
       extensions: 'grpc'
+      hook: |
+        set -euo pipefail
+        ETCD_VERSION="3.7.1"
+        if [[ "$RUNNER_OS" == "Linux" ]]; then
+          ARCHIVE="etcd-v${ETCD_VERSION}-linux-amd64.tar.gz"
+          URL="https://github.com/etcd-io/etcd/releases/download/v${ETCD_VERSION}/${ARCHIVE}"
+          curl -fsSL -o "$RUNNER_TEMP/${ARCHIVE}" "$URL"
+          tar -xzf "$RUNNER_TEMP/${ARCHIVE}" -C "$RUNNER_TEMP"
+          ETCD_BIN="$RUNNER_TEMP/etcd-v${ETCD_VERSION}-linux-amd64/etcd"
+        else
+          ARCHIVE="etcd-v${ETCD_VERSION}-windows-amd64.zip"
+          URL="https://github.com/etcd-io/etcd/releases/download/v${ETCD_VERSION}/${ARCHIVE}"
+          cd "$RUNNER_TEMP"
+          curl -fsSL -o "$ARCHIVE" "$URL"
+          powershell -NoProfile -NonInteractive -Command "Expand-Archive -LiteralPath '$ARCHIVE' -DestinationPath ."
+          ETCD_BIN="${ARCHIVE%.zip}/etcd.exe"
+        fi
+        nohup "$ETCD_BIN" --data-dir "$RUNNER_TEMP/etcd-data" >"$RUNNER_TEMP/etcd.log" 2>&1 &
+        for ((i=0; i<30; i++)); do
+          if curl -fsS http://127.0.0.1:2379/version >/dev/null 2>&1; then
+            echo "ETCD_HOST=127.0.0.1:2379" >> "$GITHUB_ENV"
+            exit 0
+          fi
+          sleep 1
+        done
+        cat "$RUNNER_TEMP/etcd.log" >&2
+        echo "etcd failed to start" >&2
+        exit 1
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

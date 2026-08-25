@@ -10,6 +10,8 @@
 - Enh: Minimum `grpc/grpc` version raised to `1.82` (@s1lver)
 - Enh: Minimum `google/protobuf` version raised to `5.36` (@s1lver)
 - Enh: Minimum `guzzlehttp/guzzle` version raised to `8.0` (@s1lver)
+- Enh: The `etcd` service is now provisioned in CI (`build.yml`) before running the tests (@s1lver)
+- Enh: Test `etcd` host is configurable via the `ETCD_HOST` environment variable (`tests/bootstrap.php`) (@s1lver)
 
 
 ## 1.1.0 (2023-05-25)
