@@ -56,11 +56,43 @@ to the require section of your composer.json file.
 - `version`
 
 ### KV
-- `range`
+- `range` (`getKey`, `getRange`)
 - `put`
+- `deleteRange`
+- `txn`
+- `compact`
 
 ### Auth
 - `authenticate`
+- `enable`
+- `disable`
+- `status`
+- `userAdd`, `userGet`, `userList`, `userDelete`, `userChangePassword`
+- `userGrantRole`, `userRevokeRole`
+- `roleAdd`, `roleGet`, `roleList`, `roleDelete`
+- `roleGrantPermission`, `roleRevokePermission`
+
+### Cluster
+- `memberAdd`
+- `memberRemove`
+- `memberUpdate`
+- `memberList`
+- `memberPromote`
+
+### Maintenance
+- `alarm`
+- `status`
+- `defragment`
+- `hash`
+- `hashKv`
+- `moveLeader`
+- `downgrade`
+
+### Lease
+- `grant`
+- `revoke`
+- `timeToLive`
+- `leases`
 
 
 ## How to use

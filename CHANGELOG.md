@@ -13,6 +13,13 @@
 - Enh: The `etcd` service is now provisioned in CI (`build.yml`) before running the tests (@s1lver)
 - Enh: Test `etcd` host is configurable via the `ETCD_HOST` environment variable (`tests/bootstrap.php`) (@s1lver)
 - Enh: gRPC `.proto` files updated to the etcd v3.7 API reference (`src/RPC/Proto/`), adding `auth.proto` and `version.proto` and regenerated PHP stubs (@s1lver)
+- Enh: Implemented the etcd v3.7 API methods (KV, Auth, Cluster, Maintenance, Lease) for both REST and gRPC protocols: `deleteRange`, `txn`, `compact`, `authEnable`, `authDisable`, `authStatus`, `authenticate`, `userAdd`, `userGet`, `userList`, `userDelete`, `userChangePassword`, `userGrantRole`, `userRevokeRole`, `roleAdd`, `roleGet`, `roleList`, `roleDelete`, `roleGrantPermission`, `roleRevokePermission`, `memberAdd`, `memberRemove`, `memberUpdate`, `memberList`, `memberPromote`, `alarm`, `status`, `defragment`, `hash`, `hashKv`, `moveLeader`, `downgrade`, `leaseGrant`, `leaseRevoke`, `leaseTimeToLive`, `leaseLeases` (@s1lver)
+- Enh: Added `EtcdEndpoint` constants, `AlarmAction`, `AlarmType`, `PermissionType` and `DowngradeAction` helper classes (@s1lver)
+- Enh: Added REST integration tests for the new API methods (`tests/EtcdHttpTest.php`) (@s1lver)
+- Enh: Added gRPC integration tests against a live etcd server (`tests/EtcdGrpcTest.php`) (@s1lver)
+- Enh: Added integration tests covering every implemented method for both protocols, including the auth user/role CRUD lifecycle (auth is enabled, exercised and disabled around the scenario) and cluster membership operations (learner member add/update/remove) (`tests/EtcdHttpTest.php`, `tests/EtcdGrpcTest.php`) (@s1lver)
+- Fix: REST `moveLeader()` now returns `true` on success; the v3.7 gRPC gateway answers the request with an empty body which has no `header` field (`src/Rest/EtcdRestModel.php`) (@s1lver)
+- Fix: gRPC `authenticate()` now returns an empty token (instead of throwing) when authentication is not enabled, matching the REST behavior (`src/Services/EtcdAuthGrpc.php`) (@s1lver)
 
 
 ## 1.1.0 (2023-05-25)

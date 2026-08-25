@@ -8,7 +8,7 @@ use Etcd\AuthClient;
 use Etcd\AuthenticateRequest;
 use Etcd\AuthenticateResponse;
 use Grpc\ChannelCredentials;
-use Yii2\Extensions\Etcd\Exceptions\EtcdException;
+use Yii;
 
 use const Grpc\STATUS_OK;
 
@@ -39,7 +39,9 @@ class EtcdAuthGrpc implements EtcdAuthInterface
         [$response, $status] = $this->client->Authenticate($request)->wait();
 
         if (STATUS_OK !== $status->code) {
-            throw new EtcdException('Errors: ' . $status->details);
+            Yii::warning($status->details);
+
+            return '';
         }
 
         return $response->getToken();
