@@ -8,6 +8,7 @@ use yii\base\BaseObject;
 
 class AuthenticateResponse extends BaseObject
 {
+    /** @var array<string, mixed> */
     public array $header = [];
     public string $token = '';
 }

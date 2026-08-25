@@ -12,7 +12,6 @@ use yii\base\Component;
 /**
  * Yii2 etcd component
  *
- * @property-read array[] $tokenOptions
  * @property-read EtcdAuthInterface $auth
  * @property-read string $version
  */
@@ -22,13 +21,16 @@ class Etcd extends Component
     public string $user = '';
     public string $password = '';
     /**
-     * @var array guzzle client options
+     * @var array<string, mixed> guzzle client options
      */
     public array $clientOptions = [];
     public string $protocol = EtcdProtocol::HTTP;
 
     private EtcdServiceInterface $service;
 
+    /**
+     * @var array<string, class-string<EtcdServiceInterface>>
+     */
     private array $protocolList = [
         EtcdProtocol::GRPC => EtcdGrpcModel::class,
         EtcdProtocol::HTTP => EtcdRestModel::class,
@@ -88,7 +90,7 @@ class Etcd extends Component
      *
      * @param string $key
      * @param string $rangeEnd
-     * @return array
+     * @return array<string, mixed>
      */
     public function deleteRange(string $key, string $rangeEnd = ''): array
     {
@@ -98,10 +100,10 @@ class Etcd extends Component
     /**
      * Txn processes multiple requests in a single transaction.
      *
-     * @param array $compare
-     * @param array $success
-     * @param array $failure
-     * @return array
+     * @param array<int, array<string, mixed>> $compare
+     * @param array<int, array<string, mixed>> $success
+     * @param array<int, array<string, mixed>> $failure
+     * @return array<string, mixed>
      */
     public function txn(array $compare, array $success, array $failure): array
     {
@@ -137,7 +139,7 @@ class Etcd extends Component
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function authStatus(): array
     {
@@ -157,7 +159,7 @@ class Etcd extends Component
 
     /**
      * @param string $name
-     * @return array
+     * @return array<string, mixed>
      */
     public function userGet(string $name): array
     {
@@ -165,7 +167,7 @@ class Etcd extends Component
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function userList(): array
     {
@@ -222,7 +224,7 @@ class Etcd extends Component
 
     /**
      * @param string $name
-     * @return array
+     * @return array<string, mixed>
      */
     public function roleGet(string $name): array
     {
@@ -230,7 +232,7 @@ class Etcd extends Component
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function roleList(): array
     {
@@ -272,7 +274,7 @@ class Etcd extends Component
     /**
      * @param string[] $peerUrls
      * @param bool $isLearner
-     * @return array
+     * @return array<string, mixed>
      */
     public function memberAdd(array $peerUrls, bool $isLearner = false): array
     {
@@ -281,7 +283,7 @@ class Etcd extends Component
 
     /**
      * @param int|string $id
-     * @return array
+     * @return array<string, mixed>
      */
     public function memberRemove(int|string $id): array
     {
@@ -291,7 +293,7 @@ class Etcd extends Component
     /**
      * @param int|string $id
      * @param string[] $peerUrls
-     * @return array
+     * @return array<string, mixed>
      */
     public function memberUpdate(int|string $id, array $peerUrls): array
     {
@@ -300,7 +302,7 @@ class Etcd extends Component
 
     /**
      * @param bool $linearizable
-     * @return array
+     * @return array<string, mixed>
      */
     public function memberList(bool $linearizable = false): array
     {
@@ -309,7 +311,7 @@ class Etcd extends Component
 
     /**
      * @param int|string $id
-     * @return array
+     * @return array<string, mixed>
      */
     public function memberPromote(int|string $id): array
     {
@@ -320,7 +322,7 @@ class Etcd extends Component
      * @param string $action
      * @param int|string $memberId
      * @param string $alarmType
-     * @return array
+     * @return array<string, mixed>
      */
     public function alarm(string $action, int|string $memberId = 0, string $alarmType = AlarmType::NONE): array
     {
@@ -328,7 +330,7 @@ class Etcd extends Component
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function status(): array
     {
@@ -344,7 +346,7 @@ class Etcd extends Component
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function hash(): array
     {
@@ -353,7 +355,7 @@ class Etcd extends Component
 
     /**
      * @param int $revision
-     * @return array
+     * @return array<string, mixed>
      */
     public function hashKv(int $revision = 0): array
     {
@@ -372,7 +374,7 @@ class Etcd extends Component
     /**
      * @param string $action
      * @param string $version
-     * @return array
+     * @return array<string, mixed>
      */
     public function downgrade(string $action, string $version = ''): array
     {
@@ -382,7 +384,7 @@ class Etcd extends Component
     /**
      * @param int $ttl
      * @param int $id
-     * @return array
+     * @return array<string, mixed>
      */
     public function leaseGrant(int $ttl, int $id = 0): array
     {
@@ -401,7 +403,7 @@ class Etcd extends Component
     /**
      * @param int $id
      * @param bool $keys
-     * @return array
+     * @return array<string, mixed>
      */
     public function leaseTimeToLive(int $id, bool $keys = false): array
     {
@@ -409,7 +411,7 @@ class Etcd extends Component
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function leaseLeases(): array
     {

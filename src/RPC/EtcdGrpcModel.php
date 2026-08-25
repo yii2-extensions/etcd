@@ -86,8 +86,10 @@ class EtcdGrpcModel implements EtcdServiceInterface
     public string $host = '';
     public string $user = '';
     public string $password = '';
+    /** @var array<string, mixed> */
     public array $clientOptions = [];
 
+    /** @var array<string, mixed> */
     public array $metadata = [];
 
     private KVClient $client;
@@ -100,7 +102,7 @@ class EtcdGrpcModel implements EtcdServiceInterface
      * @param string $host
      * @param string $user
      * @param string $password
-     * @param array $clientOptions
+     * @param array<string, mixed> $clientOptions
      * @throws EtcdException
      */
     public function __construct(string $host, string $user, string $password, array $clientOptions)
@@ -672,7 +674,7 @@ class EtcdGrpcModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     private function getConnectionOptions(): array
     {
@@ -886,6 +888,9 @@ class EtcdGrpcModel implements EtcdServiceInterface
         return $request;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function convertHeader(?ResponseHeader $header): array
     {
         if (null === $header) {
@@ -900,6 +905,9 @@ class EtcdGrpcModel implements EtcdServiceInterface
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function convertKeyValue(KeyValue $kv): array
     {
         return [
@@ -912,6 +920,9 @@ class EtcdGrpcModel implements EtcdServiceInterface
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function convertRangeResponse(?EtcdRangeResponse $response): array
     {
         if (null === $response) {
@@ -935,6 +946,9 @@ class EtcdGrpcModel implements EtcdServiceInterface
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function convertPutResponse(?PutResponse $response): array
     {
         if (null === $response) {
@@ -947,6 +961,9 @@ class EtcdGrpcModel implements EtcdServiceInterface
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function convertDeleteRangeResponse(?DeleteRangeResponse $response): array
     {
         if (null === $response) {
@@ -960,6 +977,9 @@ class EtcdGrpcModel implements EtcdServiceInterface
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function convertTxnResponse(?TxnResponse $response): array
     {
         if (null === $response) {
@@ -982,6 +1002,9 @@ class EtcdGrpcModel implements EtcdServiceInterface
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function convertResponseOp(ResponseOp $op): array
     {
         if ($op->hasResponseRange()) {
@@ -1003,6 +1026,9 @@ class EtcdGrpcModel implements EtcdServiceInterface
         return [];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function convertMember(Member $member): array
     {
         return [
@@ -1016,6 +1042,7 @@ class EtcdGrpcModel implements EtcdServiceInterface
 
     /**
      * @param RepeatedField<\Etcd\Member> $members
+     * @return array<int, array<string, mixed>>
      */
     private function convertMembers(RepeatedField $members): array
     {
@@ -1048,6 +1075,7 @@ class EtcdGrpcModel implements EtcdServiceInterface
 
     /**
      * @param RepeatedField<\Etcd\KeyValue> $kvs
+     * @return array<int, array<string, mixed>>
      */
     private function convertKeyValues(RepeatedField $kvs): array
     {
@@ -1065,6 +1093,7 @@ class EtcdGrpcModel implements EtcdServiceInterface
 
     /**
      * @param RepeatedField<\Etcd\Permission> $permissions
+     * @return array<int, array<string, mixed>>
      */
     private function convertPermissions(RepeatedField $permissions): array
     {
@@ -1085,8 +1114,8 @@ class EtcdGrpcModel implements EtcdServiceInterface
     }
 
     /**
-     * @param RepeatedField $fields
-     * @return array
+     * @param RepeatedField<\Etcd\KeyValue> $fields
+     * @return array<string, mixed>
      */
     private function collectKvs(RepeatedField $fields): array
     {

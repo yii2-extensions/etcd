@@ -15,6 +15,9 @@ use Yii2\Extensions\Etcd\Rest\RangeResponse;
 
 final class EtcdHttpTest extends TestCase
 {
+    /**
+     * @return array<int, array{string, string}>
+     */
     public static function putDataProvider(): array
     {
         return [

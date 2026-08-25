@@ -13,7 +13,9 @@ use yii\base\BaseObject;
  */
 class RangeResponse extends BaseObject implements EtcdRangeResponseInterface
 {
+    /** @var array<string, mixed> */
     public array $header = [];
+    /** @var array<int, array<string, mixed>> */
     public array $kvs = [];
     public int $count;
 

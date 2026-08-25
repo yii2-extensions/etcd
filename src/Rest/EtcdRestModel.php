@@ -24,7 +24,7 @@ class EtcdRestModel implements EtcdServiceInterface
      * @param string $host
      * @param string $user
      * @param string $password
-     * @param array $clientOptions
+     * @param array<string, mixed> $clientOptions
      */
     public function __construct(string $host, string $user, string $password, array $clientOptions)
     {
@@ -36,6 +36,7 @@ class EtcdRestModel implements EtcdServiceInterface
 
     public function getKey(string $key): RangeResponse
     {
+        /** @var array{body: string, headers?: array<string, string>} $options */
         $options = [
             RequestOptions::BODY => json_encode(['key' => trim(base64_encode($key))], JSON_THROW_ON_ERROR),
         ];
@@ -57,6 +58,7 @@ class EtcdRestModel implements EtcdServiceInterface
      */
     public function getRange(string $key, string $rangeEnd): RangeResponse
     {
+        /** @var array{body: string, headers?: array<string, string>} $options */
         $options = [
             RequestOptions::BODY => json_encode(
                 ['key' => trim(base64_encode($key)), 'range_end' => trim(base64_encode($rangeEnd))],
@@ -74,6 +76,7 @@ class EtcdRestModel implements EtcdServiceInterface
 
     public function put(string $key, string $value): bool
     {
+        /** @var array{body: string, headers?: array<string, string>} $options */
         $options = [
             RequestOptions::BODY => json_encode(
                 ['key' => base64_encode(trim($key)), 'value' => base64_encode(trim($value))],
@@ -103,10 +106,10 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @param array $compare
-     * @param array $success
-     * @param array $failure
-     * @return array
+     * @param array<int, array<string, mixed>> $compare
+     * @param array<int, array<string, mixed>> $success
+     * @param array<int, array<string, mixed>> $failure
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function txn(array $compare, array $success, array $failure): array
@@ -151,7 +154,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function authStatus(): array
@@ -174,7 +177,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function userGet(string $name): array
@@ -183,7 +186,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function userList(): array
@@ -234,7 +237,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function roleGet(string $name): array
@@ -243,7 +246,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function roleList(): array
@@ -289,7 +292,7 @@ class EtcdRestModel implements EtcdServiceInterface
 
     /**
      * @param string[] $peerUrls
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function memberAdd(array $peerUrls, bool $isLearner = false): array
@@ -298,7 +301,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function memberRemove(int|string $id): array
@@ -308,7 +311,7 @@ class EtcdRestModel implements EtcdServiceInterface
 
     /**
      * @param string[] $peerUrls
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function memberUpdate(int|string $id, array $peerUrls): array
@@ -317,7 +320,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function memberList(bool $linearizable = false): array
@@ -326,7 +329,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function memberPromote(int|string $id): array
@@ -335,7 +338,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function alarm(string $action, int|string $memberId = 0, string $alarmType = 'NONE'): array
@@ -347,7 +350,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function status(): array
@@ -366,7 +369,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function hash(): array
@@ -375,7 +378,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function hashKv(int $revision = 0): array
@@ -394,7 +397,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function downgrade(string $action, string $version = ''): array
@@ -403,7 +406,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function leaseGrant(int $ttl, int $id = 0): array
@@ -420,7 +423,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function leaseTimeToLive(int $id, bool $keys = false): array
@@ -429,7 +432,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     public function leaseLeases(): array
@@ -449,7 +452,7 @@ class EtcdRestModel implements EtcdServiceInterface
     }
 
     /**
-     * @return array|array[]
+     * @return array{headers?: array<string, string>}
      */
     private function getTokenOptions(): array
     {
@@ -471,20 +474,23 @@ class EtcdRestModel implements EtcdServiceInterface
      * Post JSON body to the grpc-gateway endpoint and decode the JSON response.
      *
      * @param string $endpoint
-     * @param array $body
-     * @return array
+     * @param array<string, mixed> $body
+     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
     private function request(string $endpoint, array $body): array
     {
         $json = $body === [] ? '{}' : json_encode($body, JSON_THROW_ON_ERROR);
 
+        /** @var array{body: string, headers?: array<string, string>} $options */
+        $options = array_merge(
+            [RequestOptions::BODY => $json],
+            $this->getTokenOptions()
+        );
+
         $response = $this->client->post(
             $this->host . EtcdEndpoint::ETCD_VERSION . $endpoint,
-            array_merge(
-                [RequestOptions::BODY => $json],
-                $this->getTokenOptions()
-            )
+            $options
         );
 
         return json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
