@@ -38,9 +38,10 @@ jobs:
         else
           ARCHIVE="etcd-v${ETCD_VERSION}-windows-amd64.zip"
           URL="https://github.com/etcd-io/etcd/releases/download/v${ETCD_VERSION}/${ARCHIVE}"
-          curl -fsSL -o "$RUNNER_TEMP/${ARCHIVE}" "$URL"
-          tar -xf "$RUNNER_TEMP/${ARCHIVE}" -C "$RUNNER_TEMP"
-          ETCD_BIN="$RUNNER_TEMP/etcd-v${ETCD_VERSION}-windows-amd64/etcd.exe"
+          cd "$RUNNER_TEMP"
+          curl -fsSL -o "$ARCHIVE" "$URL"
+          tar -xf "$ARCHIVE"
+          ETCD_BIN="etcd-v${ETCD_VERSION}-windows-amd64/etcd.exe"
         fi
         nohup "$ETCD_BIN" --data-dir "$RUNNER_TEMP/etcd-data" >"$RUNNER_TEMP/etcd.log" 2>&1 &
         for ((i=0; i<30; i++)); do
