@@ -5,6 +5,7 @@
 - Enh: Minimum `PHP` version raised to `8.5` (@s1lver)
 - Enh: Minimum `Yii2` version raised to `2.0.55` (@s1lver)
 - Chg: Change namespace from `S1lver\Etcd` to `Yii2\Extensions\Etcd` (@s1lver)
+- Chg: Split `EtcdServiceInterface` into domain service interfaces (`EtcdKvServiceInterface`, `EtcdAuthServiceInterface`, `EtcdClusterServiceInterface`, `EtcdMaintenanceServiceInterface`, `EtcdLeaseServiceInterface`) behind a protocol-neutral connection (`EtcdConnectionInterface` with REST and gRPC implementations). The `Etcd` component now exposes `getKv()`, `getAuth()`, `getCluster()`, `getMaintenance()` and `getLease()`; all API methods are accessed through the matching sub-service instead of being delegated on the component (`$etcd->put(...)` becomes `$etcd->getKv()->put(...)`) (@s1lver)
 - Enh: Applying Yii2 coding standards (@s1lver)
 - Enh #11: Static analysis with PHPStan has been added (@s1lver)
 - Enh: Minimum `grpc/grpc` version raised to `1.82` (@s1lver)
@@ -18,7 +19,7 @@
 - Enh: Added REST integration tests for the new API methods (`tests/EtcdHttpTest.php`) (@s1lver)
 - Enh: Added gRPC integration tests against a live etcd server (`tests/EtcdGrpcTest.php`) (@s1lver)
 - Enh: Added integration tests covering every implemented method for both protocols, including the auth user/role CRUD lifecycle (auth is enabled, exercised and disabled around the scenario) and cluster membership operations (learner member add/update/remove) (`tests/EtcdHttpTest.php`, `tests/EtcdGrpcTest.php`) (@s1lver)
-- Fix: REST `moveLeader()` now returns `true` on success; the v3.7 gRPC gateway answers the request with an empty body which has no `header` field (`src/Rest/EtcdRestModel.php`) (@s1lver)
+- Fix: REST `moveLeader()` now returns `true` on success; the v3.7 gRPC gateway answers the request with an empty body which has no `header` field (`src/Rest/EtcdRestMaintenance.php`) (@s1lver)
 - Fix: gRPC `authenticate()` now returns an empty token (instead of throwing) when authentication is not enabled, matching the REST behavior (`src/Services/EtcdAuthGrpc.php`) (@s1lver)
 
 

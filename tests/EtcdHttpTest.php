@@ -40,20 +40,20 @@ final class EtcdHttpTest extends TestCase
     public function testPut(string $key, string $value): void
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
-        $etcd->put($key, $value);
+        $etcd->getKv()->put($key, $value);
 
-        self::assertEquals($value, $etcd->getKey($key)->getFirstKeyValue());
+        self::assertEquals($value, $etcd->getKv()->getKey($key)->getFirstKeyValue());
     }
 
     public function testGetRange(): void
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
         $prefix = 'get-range-key';
-        $etcd->deleteRange($prefix, $prefix . 'k');
-        $etcd->put($prefix . '-1', 'one');
-        $etcd->put($prefix . '-2', 'two');
+        $etcd->getKv()->deleteRange($prefix, $prefix . 'k');
+        $etcd->getKv()->put($prefix . '-1', 'one');
+        $etcd->getKv()->put($prefix . '-2', 'two');
 
-        $response = $etcd->getRange($prefix, $prefix . 'k');
+        $response = $etcd->getKv()->getRange($prefix, $prefix . 'k');
 
         self::assertInstanceOf(RangeResponse::class, $response);
         $values = array_map(
@@ -68,15 +68,15 @@ final class EtcdHttpTest extends TestCase
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
         $prefix = 'delete-range-prefix-key';
-        $etcd->deleteRange($prefix, $prefix . 'k');
-        $etcd->put($prefix . '-1', 'one');
-        $etcd->put($prefix . '-2', 'two');
+        $etcd->getKv()->deleteRange($prefix, $prefix . 'k');
+        $etcd->getKv()->put($prefix . '-1', 'one');
+        $etcd->getKv()->put($prefix . '-2', 'two');
 
-        $result = $etcd->deleteRange($prefix, $prefix . 'k');
+        $result = $etcd->getKv()->deleteRange($prefix, $prefix . 'k');
 
         self::assertArrayHasKey('header', $result);
         self::assertEquals(2, (int) $result['deleted']);
-        $response = $etcd->getRange($prefix, $prefix . 'k');
+        $response = $etcd->getKv()->getRange($prefix, $prefix . 'k');
         self::assertInstanceOf(RangeResponse::class, $response);
         self::assertCount(0, $response->kvs);
     }
@@ -85,42 +85,42 @@ final class EtcdHttpTest extends TestCase
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
         $key = 'delete-range-key';
-        $etcd->put($key, 'value');
+        $etcd->getKv()->put($key, 'value');
 
-        $result = $etcd->deleteRange($key);
+        $result = $etcd->getKv()->deleteRange($key);
 
         self::assertArrayHasKey('header', $result);
         self::assertEquals(1, (int) $result['deleted']);
-        self::assertEquals('', $etcd->getKey($key)->getFirstKeyValue());
+        self::assertEquals('', $etcd->getKv()->getKey($key)->getFirstKeyValue());
     }
 
     public function testTxn(): void
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
         $key = 'txn-key';
-        $etcd->deleteRange($key);
-        $etcd->put($key, 'value-1');
+        $etcd->getKv()->deleteRange($key);
+        $etcd->getKv()->put($key, 'value-1');
 
-        $result = $etcd->txn(
+        $result = $etcd->getKv()->txn(
             [['result' => 'EQUAL', 'target' => 'VERSION', 'key' => $key, 'version' => 1]],
             [['request_put' => ['key' => $key, 'value' => 'value-2']]],
             []
         );
 
         self::assertTrue($result['succeeded']);
-        self::assertEquals('value-2', $etcd->getKey($key)->getFirstKeyValue());
+        self::assertEquals('value-2', $etcd->getKv()->getKey($key)->getFirstKeyValue());
     }
 
     public function testTxnOps(): void
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
         $key = 'txn-ops-key';
-        $etcd->deleteRange($key, $key . 'k');
-        $etcd->put($key, 'value-1');
-        $etcd->put($key . '-scratch', 'scratch-value');
-        $etcd->put($key . '-ignored', 'ignored-before');
+        $etcd->getKv()->deleteRange($key, $key . 'k');
+        $etcd->getKv()->put($key, 'value-1');
+        $etcd->getKv()->put($key . '-scratch', 'scratch-value');
+        $etcd->getKv()->put($key . '-ignored', 'ignored-before');
 
-        $result = $etcd->txn(
+        $result = $etcd->getKv()->txn(
             [
                 ['result' => 0, 'target' => 0, 'key' => $key, 'range_end' => '', 'version' => 1],
                 ['result' => 'GREATER', 'target' => 'CREATE', 'key' => $key, 'create_revision' => 0],
@@ -179,31 +179,31 @@ final class EtcdHttpTest extends TestCase
         self::assertArrayHasKey('response_delete_range', $result['responses'][2]);
         self::assertArrayHasKey('response_txn', $result['responses'][3]);
         self::assertArrayHasKey('response_put', $result['responses'][4]);
-        self::assertEquals('value-2', $etcd->getKey($key)->getFirstKeyValue());
-        self::assertEquals('nested', $etcd->getKey($key . '-nested')->getFirstKeyValue());
-        self::assertEquals('ignored-before', $etcd->getKey($key . '-ignored')->getFirstKeyValue());
+        self::assertEquals('value-2', $etcd->getKv()->getKey($key)->getFirstKeyValue());
+        self::assertEquals('nested', $etcd->getKv()->getKey($key . '-nested')->getFirstKeyValue());
+        self::assertEquals('ignored-before', $etcd->getKv()->getKey($key . '-ignored')->getFirstKeyValue());
     }
 
     public function testCompact(): void
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
         $key = 'compact-key';
-        $etcd->deleteRange($key);
-        $etcd->put($key, 'value');
+        $etcd->getKv()->deleteRange($key);
+        $etcd->getKv()->put($key, 'value');
 
-        $response = $etcd->getKey($key);
+        $response = $etcd->getKv()->getKey($key);
         self::assertInstanceOf(RangeResponse::class, $response);
         $revision = (int) $response->header['revision'];
 
-        self::assertTrue($etcd->compact($revision));
-        self::assertEquals('value', $etcd->getKey($key)->getFirstKeyValue());
+        self::assertTrue($etcd->getKv()->compact($revision));
+        self::assertEquals('value', $etcd->getKv()->getKey($key)->getFirstKeyValue());
     }
 
     public function testAuthStatus(): void
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
 
-        $result = $etcd->authStatus();
+        $result = $etcd->getAuth()->authStatus();
 
         self::assertArrayHasKey('authRevision', $result);
         self::assertFalse($result['enabled'] ?? false);
@@ -213,7 +213,7 @@ final class EtcdHttpTest extends TestCase
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
 
-        $result = $etcd->memberList();
+        $result = $etcd->getCluster()->memberList();
 
         self::assertArrayHasKey('members', $result);
         self::assertNotEmpty($result['members']);
@@ -223,7 +223,7 @@ final class EtcdHttpTest extends TestCase
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
 
-        $result = $etcd->status();
+        $result = $etcd->getMaintenance()->status();
 
         self::assertArrayHasKey('version', $result);
         self::assertNotEmpty($result['version']);
@@ -234,7 +234,7 @@ final class EtcdHttpTest extends TestCase
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
 
-        $result = $etcd->hash();
+        $result = $etcd->getMaintenance()->hash();
 
         self::assertArrayHasKey('hash', $result);
     }
@@ -243,7 +243,7 @@ final class EtcdHttpTest extends TestCase
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
 
-        $result = $etcd->hashKv();
+        $result = $etcd->getMaintenance()->hashKv();
 
         self::assertArrayHasKey('hash', $result);
     }
@@ -252,14 +252,14 @@ final class EtcdHttpTest extends TestCase
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
 
-        self::assertTrue($etcd->defragment());
+        self::assertTrue($etcd->getMaintenance()->defragment());
     }
 
     public function testAlarm(): void
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
 
-        $result = $etcd->alarm(AlarmAction::GET);
+        $result = $etcd->getMaintenance()->alarm(AlarmAction::GET);
 
         self::assertArrayHasKey('header', $result);
     }
@@ -268,7 +268,7 @@ final class EtcdHttpTest extends TestCase
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
 
-        $result = $etcd->downgrade(DowngradeAction::VALIDATE, '3.6');
+        $result = $etcd->getMaintenance()->downgrade(DowngradeAction::VALIDATE, '3.6');
 
         self::assertArrayHasKey('version', $result);
     }
@@ -277,7 +277,7 @@ final class EtcdHttpTest extends TestCase
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
 
-        $grant = $etcd->leaseGrant(3600);
+        $grant = $etcd->getLease()->leaseGrant(3600);
 
         self::assertArrayHasKey('ID', $grant);
 
@@ -285,45 +285,45 @@ final class EtcdHttpTest extends TestCase
 
         self::assertGreaterThan(0, $id);
 
-        $ttl = $etcd->leaseTimeToLive($id);
+        $ttl = $etcd->getLease()->leaseTimeToLive($id);
 
         self::assertArrayHasKey('TTL', $ttl);
 
-        $leases = $etcd->leaseLeases();
+        $leases = $etcd->getLease()->leaseLeases();
 
         self::assertArrayHasKey('leases', $leases);
         self::assertNotEmpty($leases['leases']);
 
-        self::assertTrue($etcd->leaseRevoke($id));
+        self::assertTrue($etcd->getLease()->leaseRevoke($id));
     }
 
     public function testMoveLeader(): void
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
 
-        $status = $etcd->status();
+        $status = $etcd->getMaintenance()->status();
 
         self::assertArrayHasKey('leader', $status);
-        self::assertTrue($etcd->moveLeader($status['leader']));
+        self::assertTrue($etcd->getMaintenance()->moveLeader($status['leader']));
     }
 
     public function testMemberPromote(): void
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
 
-        $leader = $etcd->status()['leader'];
+        $leader = $etcd->getMaintenance()->status()['leader'];
 
         $this->expectException(ClientException::class);
         $this->expectExceptionMessage('can only promote a learner member');
 
-        $etcd->memberPromote($leader);
+        $etcd->getCluster()->memberPromote($leader);
     }
 
     public function testMember(): void
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
 
-        $addResult = $etcd->memberAdd(['http://127.0.0.1:2381'], true);
+        $addResult = $etcd->getCluster()->memberAdd(['http://127.0.0.1:2381'], true);
 
         self::assertArrayHasKey('member', $addResult);
         self::assertArrayHasKey('ID', $addResult['member']);
@@ -332,23 +332,23 @@ final class EtcdHttpTest extends TestCase
         $memberId = (string) $addResult['member']['ID'];
 
         try {
-            $members = $etcd->memberList();
+            $members = $etcd->getCluster()->memberList();
 
             self::assertArrayHasKey('members', $members);
             self::assertContains($memberId, array_map('strval', array_column($members['members'], 'ID')));
 
-            $updateResult = $etcd->memberUpdate($memberId, ['http://127.0.0.1:2382']);
+            $updateResult = $etcd->getCluster()->memberUpdate($memberId, ['http://127.0.0.1:2382']);
 
             $updated = $this->findMember($updateResult['members'] ?? [], $memberId);
             self::assertContains('http://127.0.0.1:2382', $updated['peerURLs'] ?? []);
 
-            $removeResult = $etcd->memberRemove($memberId);
+            $removeResult = $etcd->getCluster()->memberRemove($memberId);
 
             self::assertArrayHasKey('members', $removeResult);
             self::assertNotContains($memberId, array_map('strval', array_column($removeResult['members'], 'ID')));
         } finally {
             try {
-                $etcd->memberRemove($memberId);
+                $etcd->getCluster()->memberRemove($memberId);
             } catch (\Throwable) {
             }
         }
@@ -361,69 +361,69 @@ final class EtcdHttpTest extends TestCase
         $etcd = new Etcd(['host' => ETCD_HOST, 'user' => $rootUser, 'password' => $rootPassword]);
         $etcdNoAuth = new Etcd(['host' => ETCD_HOST]);
 
-        if ($etcdNoAuth->authStatus()['enabled'] ?? false) {
-            $etcd->authDisable();
+        if ($etcdNoAuth->getAuth()->authStatus()['enabled'] ?? false) {
+            $etcd->getAuth()->authDisable();
         }
 
         try {
-            $etcdNoAuth->userDelete($rootUser);
+            $etcdNoAuth->getAuth()->userDelete($rootUser);
         } catch (\Throwable) {
         }
         try {
-            $etcdNoAuth->roleDelete($rootUser);
+            $etcdNoAuth->getAuth()->roleDelete($rootUser);
         } catch (\Throwable) {
         }
 
-        self::assertTrue($etcdNoAuth->userAdd($rootUser, $rootPassword));
-        self::assertTrue($etcdNoAuth->roleAdd($rootUser));
-        self::assertTrue($etcdNoAuth->userGrantRole($rootUser, $rootUser));
-        self::assertTrue($etcdNoAuth->authEnable());
+        self::assertTrue($etcdNoAuth->getAuth()->userAdd($rootUser, $rootPassword));
+        self::assertTrue($etcdNoAuth->getAuth()->roleAdd($rootUser));
+        self::assertTrue($etcdNoAuth->getAuth()->userGrantRole($rootUser, $rootUser));
+        self::assertTrue($etcdNoAuth->getAuth()->authEnable());
 
         try {
-            self::assertTrue($etcd->authStatus()['enabled']);
-            self::assertArrayHasKey('authRevision', $etcd->authStatus());
+            self::assertTrue($etcd->getAuth()->authStatus()['enabled']);
+            self::assertArrayHasKey('authRevision', $etcd->getAuth()->authStatus());
             self::assertNotEmpty($etcd->getAuth()->authenticate());
 
-            self::assertTrue($etcd->userAdd('alice', 'pw1'));
-            self::assertContains('alice', $etcd->userList()['users'] ?? []);
-            self::assertTrue($etcd->userChangePassword('alice', 'pw2'));
-            self::assertTrue($etcd->userAdd('nopass', '', true));
-            $users = $etcd->userList();
+            self::assertTrue($etcd->getAuth()->userAdd('alice', 'pw1'));
+            self::assertContains('alice', $etcd->getAuth()->userList()['users'] ?? []);
+            self::assertTrue($etcd->getAuth()->userChangePassword('alice', 'pw2'));
+            self::assertTrue($etcd->getAuth()->userAdd('nopass', '', true));
+            $users = $etcd->getAuth()->userList();
             self::assertContains('nopass', $users['users'] ?? []);
-            self::assertTrue($etcd->userGrantRole('alice', $rootUser));
-            self::assertContains($rootUser, $etcd->userGet('alice')['roles'] ?? []);
-            self::assertTrue($etcd->userRevokeRole('alice', $rootUser));
-            self::assertNotContains($rootUser, $etcd->userGet('alice')['roles'] ?? []);
+            self::assertTrue($etcd->getAuth()->userGrantRole('alice', $rootUser));
+            self::assertContains($rootUser, $etcd->getAuth()->userGet('alice')['roles'] ?? []);
+            self::assertTrue($etcd->getAuth()->userRevokeRole('alice', $rootUser));
+            self::assertNotContains($rootUser, $etcd->getAuth()->userGet('alice')['roles'] ?? []);
 
-            self::assertTrue($etcd->roleAdd('viewer'));
-            self::assertContains('viewer', $etcd->roleList()['roles'] ?? []);
-            self::assertTrue($etcd->roleGrantPermission('viewer', PermissionType::READ, '/foo', '/fop'));
+            self::assertTrue($etcd->getAuth()->roleAdd('viewer'));
+            self::assertContains('viewer', $etcd->getAuth()->roleList()['roles'] ?? []);
+            self::assertTrue($etcd->getAuth()->roleGrantPermission('viewer', PermissionType::READ, '/foo', '/fop'));
 
-            $role = $etcd->roleGet('viewer');
+            $role = $etcd->getAuth()->roleGet('viewer');
             self::assertNotEmpty($role['perm'] ?? []);
 
-            self::assertTrue($etcd->roleRevokePermission('viewer', '/foo', '/fop'));
+            self::assertTrue($etcd->getAuth()->roleRevokePermission('viewer', '/foo', '/fop'));
 
-            $role = $etcd->roleGet('viewer');
+            $role = $etcd->getAuth()->roleGet('viewer');
             self::assertEmpty($role['perm'] ?? []);
 
-            self::assertTrue($etcd->roleDelete('viewer'));
-            self::assertNotContains('viewer', $etcd->roleList()['roles'] ?? []);
+            self::assertTrue($etcd->getAuth()->roleDelete('viewer'));
+            self::assertNotContains('viewer', $etcd->getAuth()->roleList()['roles'] ?? []);
 
-            self::assertTrue($etcd->userDelete('nopass'));
-            self::assertTrue($etcd->userDelete('alice'));
-            self::assertNotContains('alice', $etcd->userList()['users'] ?? []);
+            self::assertTrue($etcd->getAuth()->userDelete('nopass'));
+            self::assertTrue($etcd->getAuth()->userDelete('alice'));
+            self::assertNotContains('alice', $etcd->getAuth()->userList()['users'] ?? []);
         } finally {
             try {
-                $etcd->authDisable();
+                $etcd->getAuth()->authDisable();
             } catch (\Throwable) {
             }
             try {
-                $etcdNoAuth->userDelete($rootUser);
+                $etcdNoAuth->getAuth()->userDelete($rootUser);
             } catch (\Throwable) {
             }
             try {
-                $etcdNoAuth->roleDelete($rootUser);
+                $etcdNoAuth->getAuth()->roleDelete($rootUser);
             } catch (\Throwable) {
             }
         }

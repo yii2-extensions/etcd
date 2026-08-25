@@ -114,7 +114,7 @@ $config = [
 
 Get key value
 ```php
-Yii::$app->etcd->getKey('hello')->firstKeyValue;
+Yii::$app->etcd->getKv()->getKey('hello')->firstKeyValue;
 
 // Hello
 ```
@@ -125,6 +125,36 @@ Get etcd version
 Yii::$app->etcd->version;
 
 // {"etcdserver":"3.5.8","etcdcluster":"3.5.0"}
+```
+
+### Domain services
+
+Since `2.0.0` all etcd API methods are grouped by domain and reached through a sub-service:
+
+```php
+// KV
+Yii::$app->etcd->getKv()->put('foo', 'bar');
+Yii::$app->etcd->getKv()->getKey('foo')->firstKeyValue;
+Yii::$app->etcd->getKv()->getRange('foo', 'fop');
+Yii::$app->etcd->getKv()->deleteRange('foo', 'fop');
+Yii::$app->etcd->getKv()->txn($compare, $success, $failure);
+Yii::$app->etcd->getKv()->compact($revision);
+
+// Auth
+Yii::$app->etcd->getAuth()->authStatus();
+Yii::$app->etcd->getAuth()->userAdd('alice', 'pw');
+Yii::$app->etcd->getAuth()->roleGrantPermission('viewer', PermissionType::READ, '/foo', '/fop');
+
+// Cluster
+Yii::$app->etcd->getCluster()->memberList();
+
+// Maintenance
+Yii::$app->etcd->getMaintenance()->status();
+Yii::$app->etcd->getMaintenance()->hash();
+
+// Lease
+Yii::$app->etcd->getLease()->leaseGrant(3600);
+Yii::$app->etcd->getLease()->leaseRevoke($id);
 ```
 
 ### Switch between supported protocol
