@@ -40,8 +40,8 @@ jobs:
           URL="https://github.com/etcd-io/etcd/releases/download/v${ETCD_VERSION}/${ARCHIVE}"
           cd "$RUNNER_TEMP"
           curl -fsSL -o "$ARCHIVE" "$URL"
-          tar -xf "$ARCHIVE"
-          ETCD_BIN="etcd-v${ETCD_VERSION}-windows-amd64/etcd.exe"
+          powershell -NoProfile -NonInteractive -Command "Expand-Archive -LiteralPath '$ARCHIVE' -DestinationPath ."
+          ETCD_BIN="${ARCHIVE%.zip}/etcd.exe"
         fi
         nohup "$ETCD_BIN" --data-dir "$RUNNER_TEMP/etcd-data" >"$RUNNER_TEMP/etcd.log" 2>&1 &
         for ((i=0; i<30; i++)); do
