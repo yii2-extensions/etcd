@@ -21,7 +21,7 @@ class ClusterClient extends \Grpc\BaseStub {
      * @param \Etcd\MemberAddRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Grpc\UnaryCall
+     * @return \Grpc\UnaryCall<\Etcd\MemberAddResponse>
      */
     public function MemberAdd(\Etcd\MemberAddRequest $argument,
       $metadata = [], $options = []) {
@@ -36,7 +36,7 @@ class ClusterClient extends \Grpc\BaseStub {
      * @param \Etcd\MemberRemoveRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Grpc\UnaryCall
+     * @return \Grpc\UnaryCall<\Etcd\MemberRemoveResponse>
      */
     public function MemberRemove(\Etcd\MemberRemoveRequest $argument,
       $metadata = [], $options = []) {
@@ -51,7 +51,7 @@ class ClusterClient extends \Grpc\BaseStub {
      * @param \Etcd\MemberUpdateRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Grpc\UnaryCall
+     * @return \Grpc\UnaryCall<\Etcd\MemberUpdateResponse>
      */
     public function MemberUpdate(\Etcd\MemberUpdateRequest $argument,
       $metadata = [], $options = []) {
@@ -66,13 +66,28 @@ class ClusterClient extends \Grpc\BaseStub {
      * @param \Etcd\MemberListRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Grpc\UnaryCall
+     * @return \Grpc\UnaryCall<\Etcd\MemberListResponse>
      */
     public function MemberList(\Etcd\MemberListRequest $argument,
       $metadata = [], $options = []) {
         return $this->_simpleRequest('/etcdserverpb.Cluster/MemberList',
         $argument,
         ['\Etcd\MemberListResponse', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * MemberPromote promotes a member from raft learner (non-voting) to raft voting member.
+     * @param \Etcd\MemberPromoteRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall<\Etcd\MemberPromoteResponse>
+     */
+    public function MemberPromote(\Etcd\MemberPromoteRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/etcdserverpb.Cluster/MemberPromote',
+        $argument,
+        ['\Etcd\MemberPromoteResponse', 'decode'],
         $metadata, $options);
     }
 

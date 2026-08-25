@@ -17,11 +17,11 @@ class KVClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Range gets the keys in the range from the store.
+     * Range gets the keys in the range from the key-value store.
      * @param \Etcd\RangeRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Grpc\UnaryCall
+     * @return \Grpc\UnaryCall<\Etcd\RangeResponse>
      */
     public function Range(\Etcd\RangeRequest $argument,
       $metadata = [], $options = []) {
@@ -32,13 +32,32 @@ class KVClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Put puts the given key into the store.
-     * A put request increases the revision of the store,
+     * RangeStream gets the keys in the range from the key-value store.
+     *
+     * This RPC is intentionally gRPC-only and does not provide a
+     * grpc-gateway REST mapping, because streaming chunked responses
+     * are not a good fit for standard JSON/REST semantics.
+     * @param \Etcd\RangeRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\ServerStreamingCall
+     */
+    public function RangeStream(\Etcd\RangeRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_serverStreamRequest('/etcdserverpb.KV/RangeStream',
+        $argument,
+        ['\Etcd\RangeStreamResponse', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Put puts the given key into the key-value store.
+     * A put request increments the revision of the key-value store
      * and generates one event in the event history.
      * @param \Etcd\PutRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Grpc\UnaryCall
+     * @return \Grpc\UnaryCall<\Etcd\PutResponse>
      */
     public function Put(\Etcd\PutRequest $argument,
       $metadata = [], $options = []) {
@@ -49,13 +68,13 @@ class KVClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Delete deletes the given range from the store.
-     * A delete request increase the revision of the store,
-     * and generates one event in the event history.
+     * DeleteRange deletes the given range from the key-value store.
+     * A delete request increments the revision of the key-value store
+     * and generates a delete event in the event history for every deleted key.
      * @param \Etcd\DeleteRangeRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Grpc\UnaryCall
+     * @return \Grpc\UnaryCall<\Etcd\DeleteRangeResponse>
      */
     public function DeleteRange(\Etcd\DeleteRangeRequest $argument,
       $metadata = [], $options = []) {
@@ -66,14 +85,14 @@ class KVClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Txn processes all the requests in one transaction.
-     * A txn request increases the revision of the store,
-     * and generates events with the same revision in the event history.
+     * Txn processes multiple requests in a single transaction.
+     * A txn request increments the revision of the key-value store
+     * and generates events with the same revision for every completed request.
      * It is not allowed to modify the same key several times within one txn.
      * @param \Etcd\TxnRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Grpc\UnaryCall
+     * @return \Grpc\UnaryCall<\Etcd\TxnResponse>
      */
     public function Txn(\Etcd\TxnRequest $argument,
       $metadata = [], $options = []) {
@@ -84,35 +103,19 @@ class KVClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Compact compacts the event history in etcd. User should compact the
-     * event history periodically, or it will grow infinitely.
+     * Compact compacts the event history in the etcd key-value store. The key-value
+     * store should be periodically compacted or the event history will continue to grow
+     * indefinitely.
      * @param \Etcd\CompactionRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Grpc\UnaryCall
+     * @return \Grpc\UnaryCall<\Etcd\CompactionResponse>
      */
     public function Compact(\Etcd\CompactionRequest $argument,
       $metadata = [], $options = []) {
         return $this->_simpleRequest('/etcdserverpb.KV/Compact',
         $argument,
         ['\Etcd\CompactionResponse', 'decode'],
-        $metadata, $options);
-    }
-
-    /**
-     * Hash returns the hash of local KV state for consistency checking purpose.
-     * This is designed for testing purpose. Do not use this in production when there
-     * are ongoing transactions.
-     * @param \Etcd\HashRequest $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
-     * @return \Grpc\UnaryCall
-     */
-    public function Hash(\Etcd\HashRequest $argument,
-      $metadata = [], $options = []) {
-        return $this->_simpleRequest('/etcdserverpb.KV/Hash',
-        $argument,
-        ['\Etcd\HashResponse', 'decode'],
         $metadata, $options);
     }
 

@@ -12,6 +12,7 @@
 - Enh: Minimum `guzzlehttp/guzzle` version raised to `8.0` (@s1lver)
 - Enh: The `etcd` service is now provisioned in CI (`build.yml`) before running the tests (@s1lver)
 - Enh: Test `etcd` host is configurable via the `ETCD_HOST` environment variable (`tests/bootstrap.php`) (@s1lver)
+- Enh: gRPC `.proto` files updated to the etcd v3.7 API reference (`src/RPC/Proto/`), adding `auth.proto` and `version.proto` and regenerated PHP stubs (@s1lver)
 
 
 ## 1.1.0 (2023-05-25)

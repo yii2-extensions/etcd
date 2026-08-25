@@ -9,7 +9,7 @@ RUN MAKEFLAGS="-j$(nproc)" yes | pecl install grpc protobuf xdebug pcov
 RUN docker-php-ext-enable grpc protobuf xdebug pcov
 
 # Installing protoc utils
-ADD https://github.com/protocolbuffers/protobuf/releases/download/v36.0/protoc-36.0-linux-x86_64.zip /usr/local
+RUN apk add protoc protobuf-dev grpc-plugins
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 

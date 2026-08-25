@@ -13,5 +13,7 @@ down:				## Down active containers
 sh:				## Exec PHP container
 	docker exec -it etcd-php sh
 
-protoc:				## Create\update services from .proto. Params {{ s=SERVICE NAME }}
-	docker exec -i etcd-php sh -c "cd /var/www/src/RPC/ && protoc -I . --php_out=. --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_php_plugin` Proto/$(s).proto"
+PROTOS := Proto/auth.proto Proto/version.proto Proto/kv.proto Proto/rpc.proto
+
+protoc:				## Regenerate PHP from .proto files. Params {{ s=SERVICE NAME }} (default: all)
+	docker exec -i etcd-php sh -c 'cd /var/www/src/RPC/ && protoc -I . -I /usr/include --php_out=. --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_php_plugin` $(if $(s),Proto/$(s).proto,$(PROTOS))'
