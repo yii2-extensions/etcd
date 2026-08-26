@@ -4,42 +4,40 @@ declare(strict_types=1);
 
 namespace Yii2\Extensions\Etcd;
 
+use Yii2\Extensions\Etcd\Responses\MemberAddResponse;
+use Yii2\Extensions\Etcd\Responses\MemberListResponse;
+use Yii2\Extensions\Etcd\Responses\MemberPromoteResponse;
+use Yii2\Extensions\Etcd\Responses\MemberRemoveResponse;
+use Yii2\Extensions\Etcd\Responses\MemberUpdateResponse;
+
 interface EtcdClusterServiceInterface
 {
     /**
      * Adds a member into the cluster.
      *
      * @param string[] $peerUrls
-     * @return array<string, mixed> response fields: header, member, members
      */
-    public function memberAdd(array $peerUrls, bool $isLearner = false): array;
+    public function memberAdd(array $peerUrls, bool $isLearner = false): MemberAddResponse;
 
     /**
      * Removes an existing member from the cluster.
-     *
-     * @return array<string, mixed> response fields: header, members
      */
-    public function memberRemove(int|string $id): array;
+    public function memberRemove(int|string $id): MemberRemoveResponse;
 
     /**
      * Updates the member configuration.
      *
      * @param string[] $peerUrls
-     * @return array<string, mixed> response fields: header, members
      */
-    public function memberUpdate(int|string $id, array $peerUrls): array;
+    public function memberUpdate(int|string $id, array $peerUrls): MemberUpdateResponse;
 
     /**
      * Lists all the members in the cluster.
-     *
-     * @return array<string, mixed> response fields: header, members
      */
-    public function memberList(bool $linearizable = false): array;
+    public function memberList(bool $linearizable = false): MemberListResponse;
 
     /**
      * Promotes a member from raft learner (non-voting) to raft voting member.
-     *
-     * @return array<string, mixed> response fields: header, members
      */
-    public function memberPromote(int|string $id): array;
+    public function memberPromote(int|string $id): MemberPromoteResponse;
 }

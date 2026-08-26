@@ -8,6 +8,11 @@ use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use Yii2\Extensions\Etcd\EtcdEndpoint;
 use Yii2\Extensions\Etcd\EtcdMaintenanceServiceInterface;
+use Yii2\Extensions\Etcd\Responses\AlarmResponse;
+use Yii2\Extensions\Etcd\Responses\DowngradeResponse;
+use Yii2\Extensions\Etcd\Responses\HashKvResponse;
+use Yii2\Extensions\Etcd\Responses\HashResponse;
+use Yii2\Extensions\Etcd\Responses\StatusResponse;
 
 final class EtcdRestMaintenance extends AbstractEtcdRestService implements EtcdMaintenanceServiceInterface
 {
@@ -23,24 +28,24 @@ final class EtcdRestMaintenance extends AbstractEtcdRestService implements EtcdM
     }
 
     /**
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function alarm(string $action, int|string $memberId = 0, string $alarmType = 'NONE'): array
+    public function alarm(string $action, int|string $memberId = 0, string $alarmType = 'NONE'): AlarmResponse
     {
-        return $this->request(
-            EtcdEndpoint::ALARM,
-            ['action' => $action, 'memberID' => (string) $memberId, 'alarm' => $alarmType]
+        return new AlarmResponse(
+            $this->request(
+                EtcdEndpoint::ALARM,
+                ['action' => $action, 'memberID' => (string) $memberId, 'alarm' => $alarmType]
+            )
         );
     }
 
     /**
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function status(): array
+    public function status(): StatusResponse
     {
-        return $this->request(EtcdEndpoint::STATUS, []);
+        return new StatusResponse($this->request(EtcdEndpoint::STATUS, []));
     }
 
     /**
@@ -54,21 +59,19 @@ final class EtcdRestMaintenance extends AbstractEtcdRestService implements EtcdM
     }
 
     /**
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function hash(): array
+    public function hash(): HashResponse
     {
-        return $this->request(EtcdEndpoint::HASH, []);
+        return new HashResponse($this->request(EtcdEndpoint::HASH, []));
     }
 
     /**
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function hashKv(int $revision = 0): array
+    public function hashKv(int $revision = 0): HashKvResponse
     {
-        return $this->request(EtcdEndpoint::HASH_KV, ['revision' => (string) $revision]);
+        return new HashKvResponse($this->request(EtcdEndpoint::HASH_KV, ['revision' => (string) $revision]));
     }
 
     /**
@@ -82,11 +85,10 @@ final class EtcdRestMaintenance extends AbstractEtcdRestService implements EtcdM
     }
 
     /**
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function downgrade(string $action, string $version = ''): array
+    public function downgrade(string $action, string $version = ''): DowngradeResponse
     {
-        return $this->request(EtcdEndpoint::DOWNGRADE, ['action' => $action, 'version' => $version]);
+        return new DowngradeResponse($this->request(EtcdEndpoint::DOWNGRADE, ['action' => $action, 'version' => $version]));
     }
 }

@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Yii2\Extensions\Etcd;
 
+use Yii2\Extensions\Etcd\Responses\AlarmResponse;
+use Yii2\Extensions\Etcd\Responses\DowngradeResponse;
+use Yii2\Extensions\Etcd\Responses\HashKvResponse;
+use Yii2\Extensions\Etcd\Responses\HashResponse;
+use Yii2\Extensions\Etcd\Responses\StatusResponse;
+
 interface EtcdMaintenanceServiceInterface
 {
     public function getVersion(): string;
@@ -13,16 +19,13 @@ interface EtcdMaintenanceServiceInterface
      *
      * @param string $action one of {@see AlarmAction} values
      * @param string $alarmType one of {@see AlarmType} values
-     * @return array<string, mixed> response fields: header, alarms
      */
-    public function alarm(string $action, int|string $memberId = 0, string $alarmType = AlarmType::NONE): array;
+    public function alarm(string $action, int|string $memberId = 0, string $alarmType = AlarmType::NONE): AlarmResponse;
 
     /**
      * Gets the status of the member.
-     *
-     * @return array<string, mixed> response fields: header, version, dbSize, leader, raftIndex, raftTerm, ...
      */
-    public function status(): array;
+    public function status(): StatusResponse;
 
     /**
      * Defragments a member's backend database to recover storage space.
@@ -31,17 +34,13 @@ interface EtcdMaintenanceServiceInterface
 
     /**
      * Computes the hash of whole backend keyspace (designed for testing ONLY!).
-     *
-     * @return array<string, mixed> response fields: header, hash
      */
-    public function hash(): array;
+    public function hash(): HashResponse;
 
     /**
      * Computes the hash of all MVCC keys up to a given revision.
-     *
-     * @return array<string, mixed> response fields: header, hash, compact_revision, hash_revision
      */
-    public function hashKv(int $revision = 0): array;
+    public function hashKv(int $revision = 0): HashKvResponse;
 
     /**
      * Requests current leader node to transfer its leadership to transferee.
@@ -52,7 +51,6 @@ interface EtcdMaintenanceServiceInterface
      * Requests downgrades, verifies feasibility or cancels downgrade on the cluster version.
      *
      * @param string $action one of {@see DowngradeAction} values
-     * @return array<string, mixed> response fields: header, version
      */
-    public function downgrade(string $action, string $version = ''): array;
+    public function downgrade(string $action, string $version = ''): DowngradeResponse;
 }

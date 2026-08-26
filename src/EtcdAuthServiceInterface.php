@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Yii2\Extensions\Etcd;
 
+use Yii2\Extensions\Etcd\Responses\AuthStatusResponse;
+use Yii2\Extensions\Etcd\Responses\RoleGetResponse;
+use Yii2\Extensions\Etcd\Responses\RoleListResponse;
+use Yii2\Extensions\Etcd\Responses\UserGetResponse;
+use Yii2\Extensions\Etcd\Responses\UserListResponse;
 use Yii2\Extensions\Etcd\Services\EtcdAuthInterface;
 
 interface EtcdAuthServiceInterface extends EtcdAuthInterface
@@ -20,10 +25,8 @@ interface EtcdAuthServiceInterface extends EtcdAuthInterface
 
     /**
      * Displays authentication status.
-     *
-     * @return array<string, mixed> response fields: header, enabled, authRevision
      */
-    public function authStatus(): array;
+    public function authStatus(): AuthStatusResponse;
 
     /**
      * Adds a new user. User name cannot be empty.
@@ -32,17 +35,13 @@ interface EtcdAuthServiceInterface extends EtcdAuthInterface
 
     /**
      * Gets detailed user information.
-     *
-     * @return array<string, mixed> response fields: header, roles
      */
-    public function userGet(string $name): array;
+    public function userGet(string $name): UserGetResponse;
 
     /**
      * Gets a list of all users.
-     *
-     * @return array<string, mixed> response fields: header, users
      */
-    public function userList(): array;
+    public function userList(): UserListResponse;
 
     /**
      * Deletes a specified user.
@@ -71,17 +70,13 @@ interface EtcdAuthServiceInterface extends EtcdAuthInterface
 
     /**
      * Gets detailed role information.
-     *
-     * @return array<string, mixed> response fields: header, perm
      */
-    public function roleGet(string $name): array;
+    public function roleGet(string $name): RoleGetResponse;
 
     /**
      * Gets lists of all roles.
-     *
-     * @return array<string, mixed> response fields: header, roles
      */
-    public function roleList(): array;
+    public function roleList(): RoleListResponse;
 
     /**
      * Deletes a specified role.
