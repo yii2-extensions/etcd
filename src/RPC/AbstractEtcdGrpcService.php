@@ -9,15 +9,17 @@ use Google\Protobuf\Internal\Message;
 use Grpc\ChannelCredentials;
 use Grpc\UnaryCall;
 use Yii2\Extensions\Etcd\Exceptions\EtcdException;
+use Yii2\Extensions\Etcd\Services\AuthTokenProvider;
 use Yii2\Extensions\Etcd\Services\EtcdAuthGrpc;
 
 use const Grpc\STATUS_OK;
 
 abstract class AbstractEtcdGrpcService
 {
-    protected EtcdGrpcConnection $connection;
-
+    private ?AuthTokenProvider $tokenProvider = null;
     private ?EtcdAuthGrpc $authenticator = null;
+
+    protected EtcdGrpcConnection $connection;
 
     public function __construct(EtcdGrpcConnection $connection)
     {
@@ -32,7 +34,7 @@ abstract class AbstractEtcdGrpcService
         return [
             'credentials' => ChannelCredentials::createInsecure(),
             'update_metadata' => function ($metaData) {
-                $token = $this->authenticator()->authenticate();
+                $token = $this->tokenProvider()->authenticate();
 
                 if ('' !== $token) {
                     $metaData['Authorization'] = [$token];
@@ -41,6 +43,14 @@ abstract class AbstractEtcdGrpcService
                 return $metaData;
             },
         ];
+    }
+
+    protected function tokenProvider(): AuthTokenProvider
+    {
+        return $this->tokenProvider ??= new AuthTokenProvider(
+            $this->authenticator(),
+            $this->connection->user,
+        );
     }
 
     protected function authenticator(): EtcdAuthGrpc

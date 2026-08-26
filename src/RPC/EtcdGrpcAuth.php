@@ -14,7 +14,7 @@ use Etcd\AuthRoleGrantPermissionRequest;
 use Etcd\AuthRoleListRequest;
 use Etcd\AuthRoleRevokePermissionRequest;
 use Etcd\AuthStatusRequest;
-use Etcd\AuthStatusResponse;
+use Etcd\AuthStatusResponse as EtcdAuthStatusResponse;
 use Etcd\AuthUserAddRequest;
 use Etcd\AuthUserChangePasswordRequest;
 use Etcd\AuthUserDeleteRequest;
@@ -27,6 +27,11 @@ use Etcd\Permission\Type as EtcdPermissionType;
 use Etcd\UserAddOptions;
 use Google\Protobuf\Internal\RepeatedField;
 use Yii2\Extensions\Etcd\EtcdAuthServiceInterface;
+use Yii2\Extensions\Etcd\Responses\AuthStatusResponse;
+use Yii2\Extensions\Etcd\Responses\RoleGetResponse;
+use Yii2\Extensions\Etcd\Responses\RoleListResponse;
+use Yii2\Extensions\Etcd\Responses\UserGetResponse;
+use Yii2\Extensions\Etcd\Responses\UserListResponse;
 
 final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServiceInterface
 {
@@ -39,7 +44,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
 
     public function authenticate(): string
     {
-        return $this->authenticator()->authenticate();
+        return $this->tokenProvider()->authenticate();
     }
 
     public function authEnable(): bool
@@ -56,16 +61,16 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         return true;
     }
 
-    public function authStatus(): array
+    public function authStatus(): AuthStatusResponse
     {
-        /** @var AuthStatusResponse $response */
+        /** @var EtcdAuthStatusResponse $response */
         $response = $this->wait($this->getClient()->AuthStatus(new AuthStatusRequest()));
 
-        return [
+        return new AuthStatusResponse([
             'header' => $this->convertHeader($response->getHeader()),
             'enabled' => $response->getEnabled(),
             'authRevision' => $response->getAuthRevision(),
-        ];
+        ]);
     }
 
     public function userAdd(string $name, string $password, bool $noPassword = false): bool
@@ -83,7 +88,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         return true;
     }
 
-    public function userGet(string $name): array
+    public function userGet(string $name): UserGetResponse
     {
         $request = new AuthUserGetRequest();
         $request->setName($name);
@@ -91,21 +96,21 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         /** @var \Etcd\AuthUserGetResponse $response */
         $response = $this->wait($this->getClient()->UserGet($request));
 
-        return [
+        return new UserGetResponse([
             'header' => $this->convertHeader($response->getHeader()),
             'roles' => $this->convertStringList($response->getRoles()),
-        ];
+        ]);
     }
 
-    public function userList(): array
+    public function userList(): UserListResponse
     {
         /** @var \Etcd\AuthUserListResponse $response */
         $response = $this->wait($this->getClient()->UserList(new AuthUserListRequest()));
 
-        return [
+        return new UserListResponse([
             'header' => $this->convertHeader($response->getHeader()),
             'users' => $this->convertStringList($response->getUsers()),
-        ];
+        ]);
     }
 
     public function userDelete(string $name): bool
@@ -161,7 +166,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         return true;
     }
 
-    public function roleGet(string $name): array
+    public function roleGet(string $name): RoleGetResponse
     {
         $request = new AuthRoleGetRequest();
         $request->setRole($name);
@@ -169,21 +174,21 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         /** @var \Etcd\AuthRoleGetResponse $response */
         $response = $this->wait($this->getClient()->RoleGet($request));
 
-        return [
+        return new RoleGetResponse([
             'header' => $this->convertHeader($response->getHeader()),
             'perm' => $this->convertPermissions($response->getPerm()),
-        ];
+        ]);
     }
 
-    public function roleList(): array
+    public function roleList(): RoleListResponse
     {
         /** @var \Etcd\AuthRoleListResponse $response */
         $response = $this->wait($this->getClient()->RoleList(new AuthRoleListRequest()));
 
-        return [
+        return new RoleListResponse([
             'header' => $this->convertHeader($response->getHeader()),
             'roles' => $this->convertStringList($response->getRoles()),
-        ];
+        ]);
     }
 
     public function roleDelete(string $name): bool

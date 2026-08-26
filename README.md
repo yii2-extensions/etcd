@@ -157,6 +157,22 @@ Yii::$app->etcd->getLease()->leaseGrant(3600);
 Yii::$app->etcd->getLease()->leaseRevoke($id);
 ```
 
+### Typed responses
+
+Since `2.0.0` the methods that return a non-scalar result return a typed response
+object from `\Yii2\Extensions\Etcd\Responses\` (e.g. `DeleteRangeResponse`,
+`TxnResponse`, `StatusResponse`, `LeaseGrantResponse`) instead of a plain array.
+Nested structures stay arrays, top-level fields are exposed as properties:
+
+```php
+$result = Yii::$app->etcd->getKv()->deleteRange('foo', 'fop');
+$result->deleted;      // number of deleted keys
+$result->prevKvs;      // previous key-value pairs (when prev_kv is set)
+
+$grant = Yii::$app->etcd->getLease()->leaseGrant(3600);
+$grant->ID;            // new lease ID
+```
+
 ### Switch between supported protocol
 
 > etcd v3 uses gRPC for its messaging protocol. For languages with no gRPC support, etcd provides a JSON gRPC gateway. This gateway serves a RESTful proxy that translates HTTP/JSON requests into gRPC messages.

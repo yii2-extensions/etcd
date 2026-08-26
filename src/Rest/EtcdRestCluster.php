@@ -8,53 +8,59 @@ use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use Yii2\Extensions\Etcd\EtcdClusterServiceInterface;
 use Yii2\Extensions\Etcd\EtcdEndpoint;
+use Yii2\Extensions\Etcd\Responses\MemberAddResponse;
+use Yii2\Extensions\Etcd\Responses\MemberListResponse;
+use Yii2\Extensions\Etcd\Responses\MemberPromoteResponse;
+use Yii2\Extensions\Etcd\Responses\MemberRemoveResponse;
+use Yii2\Extensions\Etcd\Responses\MemberUpdateResponse;
 
 final class EtcdRestCluster extends AbstractEtcdRestService implements EtcdClusterServiceInterface
 {
     /**
      * @param string[] $peerUrls
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function memberAdd(array $peerUrls, bool $isLearner = false): array
+    public function memberAdd(array $peerUrls, bool $isLearner = false): MemberAddResponse
     {
-        return $this->request(EtcdEndpoint::MEMBER_ADD, ['peerURLs' => $peerUrls, 'isLearner' => $isLearner]);
+        return new MemberAddResponse(
+            $this->request(EtcdEndpoint::MEMBER_ADD, ['peerURLs' => $peerUrls, 'isLearner' => $isLearner])
+        );
     }
 
     /**
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function memberRemove(int|string $id): array
+    public function memberRemove(int|string $id): MemberRemoveResponse
     {
-        return $this->request(EtcdEndpoint::MEMBER_REMOVE, ['ID' => (string) $id]);
+        return new MemberRemoveResponse($this->request(EtcdEndpoint::MEMBER_REMOVE, ['ID' => (string) $id]));
     }
 
     /**
      * @param string[] $peerUrls
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function memberUpdate(int|string $id, array $peerUrls): array
+    public function memberUpdate(int|string $id, array $peerUrls): MemberUpdateResponse
     {
-        return $this->request(EtcdEndpoint::MEMBER_UPDATE, ['ID' => (string) $id, 'peerURLs' => $peerUrls]);
+        return new MemberUpdateResponse(
+            $this->request(EtcdEndpoint::MEMBER_UPDATE, ['ID' => (string) $id, 'peerURLs' => $peerUrls])
+        );
     }
 
     /**
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function memberList(bool $linearizable = false): array
+    public function memberList(bool $linearizable = false): MemberListResponse
     {
-        return $this->request(EtcdEndpoint::MEMBER_LIST, ['linearizable' => $linearizable]);
+        return new MemberListResponse(
+            $this->request(EtcdEndpoint::MEMBER_LIST, ['linearizable' => $linearizable])
+        );
     }
 
     /**
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function memberPromote(int|string $id): array
+    public function memberPromote(int|string $id): MemberPromoteResponse
     {
-        return $this->request(EtcdEndpoint::MEMBER_PROMOTE, ['ID' => (string) $id]);
+        return new MemberPromoteResponse($this->request(EtcdEndpoint::MEMBER_PROMOTE, ['ID' => (string) $id]));
     }
 }

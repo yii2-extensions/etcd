@@ -21,6 +21,8 @@
 - Enh: Added integration tests covering every implemented method for both protocols, including the auth user/role CRUD lifecycle (auth is enabled, exercised and disabled around the scenario) and cluster membership operations (learner member add/update/remove) (`tests/EtcdHttpTest.php`, `tests/EtcdGrpcTest.php`) (@s1lver)
 - Fix: REST `moveLeader()` now returns `true` on success; the v3.7 gRPC gateway answers the request with an empty body which has no `header` field (`src/Rest/EtcdRestMaintenance.php`) (@s1lver)
 - Fix: gRPC `authenticate()` now returns an empty token (instead of throwing) when authentication is not enabled, matching the REST behavior (`src/Services/EtcdAuthGrpc.php`) (@s1lver)
+- Enh: Added typed response objects for the `deleteRange`, `txn`, auth, cluster, maintenance and lease domains (`src/Responses/`); array-typed responses are replaced with `\Yii2\Extensions\Etcd\Responses\*Response` instances exposing public properties (e.g. `$result->deleted`, `$grant->ID`) (@s1lver)
+- Enh: Token caching via `AuthTokenProvider` (`src/Services/AuthTokenProvider.php`): the auth token is fetched once and reused for `ttl` (default 300) seconds by both the REST and gRPC paths instead of being re-authenticated on every request (@s1lver)
 
 
 ## 1.1.0 (2023-05-25)

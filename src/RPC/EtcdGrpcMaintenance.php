@@ -10,15 +10,20 @@ use Etcd\AlarmType;
 use Etcd\DowngradeRequest;
 use Etcd\DowngradeRequest\DowngradeAction;
 use Etcd\HashKVRequest;
-use Etcd\HashKVResponse;
+use Etcd\HashKVResponse as EtcdHashKVResponse;
 use Etcd\HashRequest;
-use Etcd\HashResponse;
+use Etcd\HashResponse as EtcdHashResponse;
 use Etcd\MaintenanceClient;
 use Etcd\MoveLeaderRequest;
 use Etcd\StatusRequest;
-use Etcd\StatusResponse;
+use Etcd\StatusResponse as EtcdStatusResponse;
 use Google\Protobuf\Internal\RepeatedField;
 use Yii2\Extensions\Etcd\EtcdMaintenanceServiceInterface;
+use Yii2\Extensions\Etcd\Responses\AlarmResponse;
+use Yii2\Extensions\Etcd\Responses\DowngradeResponse;
+use Yii2\Extensions\Etcd\Responses\HashKvResponse;
+use Yii2\Extensions\Etcd\Responses\HashResponse;
+use Yii2\Extensions\Etcd\Responses\StatusResponse;
 
 final class EtcdGrpcMaintenance extends AbstractEtcdGrpcService implements EtcdMaintenanceServiceInterface
 {
@@ -34,7 +39,7 @@ final class EtcdGrpcMaintenance extends AbstractEtcdGrpcService implements EtcdM
         return 'Not supported';
     }
 
-    public function alarm(string $action, int|string $memberId = 0, string $alarmType = 'NONE'): array
+    public function alarm(string $action, int|string $memberId = 0, string $alarmType = 'NONE'): AlarmResponse
     {
         $request = new AlarmRequest();
         $request->setAction((int) AlarmAction::value($action));
@@ -56,15 +61,15 @@ final class EtcdGrpcMaintenance extends AbstractEtcdGrpcService implements EtcdM
             ];
         }
 
-        return [
+        return new AlarmResponse([
             'header' => $this->convertHeader($response->getHeader()),
             'alarms' => $alarms,
-        ];
+        ]);
     }
 
-    public function status(): array
+    public function status(): StatusResponse
     {
-        /** @var StatusResponse $response */
+        /** @var EtcdStatusResponse $response */
         $response = $this->wait($this->getClient()->Status(new StatusRequest()));
 
         $result = [
@@ -89,7 +94,7 @@ final class EtcdGrpcMaintenance extends AbstractEtcdGrpcService implements EtcdM
             ];
         }
 
-        return $result;
+        return new StatusResponse($result);
     }
 
     public function defragment(): bool
@@ -99,31 +104,31 @@ final class EtcdGrpcMaintenance extends AbstractEtcdGrpcService implements EtcdM
         return true;
     }
 
-    public function hash(): array
+    public function hash(): HashResponse
     {
-        /** @var HashResponse $response */
+        /** @var EtcdHashResponse $response */
         $response = $this->wait($this->getClient()->Hash(new HashRequest()));
 
-        return [
+        return new HashResponse([
             'header' => $this->convertHeader($response->getHeader()),
             'hash' => $response->getHash(),
-        ];
+        ]);
     }
 
-    public function hashKv(int $revision = 0): array
+    public function hashKv(int $revision = 0): HashKvResponse
     {
         $request = new HashKVRequest();
         $request->setRevision($revision);
 
-        /** @var HashKVResponse $response */
+        /** @var EtcdHashKVResponse $response */
         $response = $this->wait($this->getClient()->HashKV($request));
 
-        return [
+        return new HashKvResponse([
             'header' => $this->convertHeader($response->getHeader()),
             'hash' => $response->getHash(),
             'compact_revision' => $response->getCompactRevision(),
             'hash_revision' => $response->getHashRevision(),
-        ];
+        ]);
     }
 
     public function moveLeader(int|string $targetId): bool
@@ -136,7 +141,7 @@ final class EtcdGrpcMaintenance extends AbstractEtcdGrpcService implements EtcdM
         return true;
     }
 
-    public function downgrade(string $action, string $version = ''): array
+    public function downgrade(string $action, string $version = ''): DowngradeResponse
     {
         $request = new DowngradeRequest();
         $request->setAction((int) DowngradeAction::value($action));
@@ -148,9 +153,9 @@ final class EtcdGrpcMaintenance extends AbstractEtcdGrpcService implements EtcdM
         /** @var \Etcd\DowngradeResponse $response */
         $response = $this->wait($this->getClient()->Downgrade($request));
 
-        return [
+        return new DowngradeResponse([
             'header' => $this->convertHeader($response->getHeader()),
             'version' => $response->getVersion(),
-        ];
+        ]);
     }
 }

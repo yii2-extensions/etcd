@@ -9,7 +9,7 @@ use Etcd\Compare\CompareResult;
 use Etcd\Compare\CompareTarget;
 use Etcd\CompactionRequest;
 use Etcd\DeleteRangeRequest;
-use Etcd\DeleteRangeResponse;
+use Etcd\DeleteRangeResponse as EtcdDeleteRangeResponse;
 use Etcd\KeyValue;
 use Etcd\KVClient;
 use Etcd\PutRequest;
@@ -19,9 +19,11 @@ use Etcd\RangeResponse as EtcdRangeResponse;
 use Etcd\RequestOp;
 use Etcd\ResponseOp;
 use Etcd\TxnRequest;
-use Etcd\TxnResponse;
+use Etcd\TxnResponse as EtcdTxnResponse;
 use Google\Protobuf\Internal\RepeatedField;
 use Yii2\Extensions\Etcd\EtcdKvServiceInterface;
+use Yii2\Extensions\Etcd\Responses\DeleteRangeResponse;
+use Yii2\Extensions\Etcd\Responses\TxnResponse;
 
 final class EtcdGrpcKv extends AbstractEtcdGrpcService implements EtcdKvServiceInterface
 {
@@ -66,7 +68,7 @@ final class EtcdGrpcKv extends AbstractEtcdGrpcService implements EtcdKvServiceI
         return true;
     }
 
-    public function deleteRange(string $key, string $rangeEnd = ''): array
+    public function deleteRange(string $key, string $rangeEnd = ''): DeleteRangeResponse
     {
         $request = new DeleteRangeRequest();
         $request->setKey($key);
@@ -75,23 +77,23 @@ final class EtcdGrpcKv extends AbstractEtcdGrpcService implements EtcdKvServiceI
             $request->setRangeEnd($rangeEnd);
         }
 
-        /** @var DeleteRangeResponse $response */
+        /** @var EtcdDeleteRangeResponse $response */
         $response = $this->wait($this->getClient()->DeleteRange($request));
 
-        return $this->convertDeleteRangeResponse($response);
+        return new DeleteRangeResponse($this->convertDeleteRangeResponse($response));
     }
 
-    public function txn(array $compare, array $success, array $failure): array
+    public function txn(array $compare, array $success, array $failure): TxnResponse
     {
         $request = new TxnRequest();
         $request->setCompare($this->buildCompares($compare));
         $request->setSuccess($this->buildRequestOps($success));
         $request->setFailure($this->buildRequestOps($failure));
 
-        /** @var TxnResponse $response */
+        /** @var EtcdTxnResponse $response */
         $response = $this->wait($this->getClient()->Txn($request));
 
-        return $this->convertTxnResponse($response);
+        return new TxnResponse($this->convertTxnResponse($response));
     }
 
     public function compact(int $revision, bool $physical = false): bool
@@ -338,7 +340,7 @@ final class EtcdGrpcKv extends AbstractEtcdGrpcService implements EtcdKvServiceI
     /**
      * @return array<string, mixed>
      */
-    private function convertDeleteRangeResponse(?DeleteRangeResponse $response): array
+    private function convertDeleteRangeResponse(?EtcdDeleteRangeResponse $response): array
     {
         if (null === $response) {
             return [];
@@ -354,7 +356,7 @@ final class EtcdGrpcKv extends AbstractEtcdGrpcService implements EtcdKvServiceI
     /**
      * @return array<string, mixed>
      */
-    private function convertTxnResponse(?TxnResponse $response): array
+    private function convertTxnResponse(?EtcdTxnResponse $response): array
     {
         if (null === $response) {
             return [];

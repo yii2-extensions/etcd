@@ -5,22 +5,19 @@ declare(strict_types=1);
 namespace Yii2\Extensions\Etcd\Rest;
 
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\RequestOptions;
 use JsonException;
 use Yii2\Extensions\Etcd\EtcdEndpoint;
 use Yii2\Extensions\Etcd\EtcdKvServiceInterface;
+use Yii2\Extensions\Etcd\Responses\DeleteRangeResponse;
+use Yii2\Extensions\Etcd\Responses\TxnResponse;
 
 final class EtcdRestKv extends AbstractEtcdRestService implements EtcdKvServiceInterface
 {
     public function getKey(string $key): RangeResponse
     {
-        /** @var array{body: string, headers?: array<string, string>} $options */
-        $options = [
-            RequestOptions::BODY => json_encode(['key' => trim(base64_encode($key))], JSON_THROW_ON_ERROR),
-        ];
-        $response = $this->connection->client->post(
-            $this->connection->host . EtcdEndpoint::ETCD_VERSION . EtcdEndpoint::RANGE,
-            array_merge($options, $this->getTokenOptions())
+        $response = $this->requestRaw(
+            EtcdEndpoint::RANGE,
+            ['key' => trim(base64_encode($key))]
         );
 
         return new RangeResponse(json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR));
@@ -36,17 +33,12 @@ final class EtcdRestKv extends AbstractEtcdRestService implements EtcdKvServiceI
      */
     public function getRange(string $key, string $rangeEnd): RangeResponse
     {
-        /** @var array{body: string, headers?: array<string, string>} $options */
-        $options = [
-            RequestOptions::BODY => json_encode(
-                ['key' => trim(base64_encode($key)), 'range_end' => trim(base64_encode($rangeEnd))],
-                JSON_THROW_ON_ERROR
-            ),
-        ];
-
-        $response = $this->connection->client->post(
-            $this->connection->host . EtcdEndpoint::ETCD_VERSION . EtcdEndpoint::RANGE,
-            array_merge($options, $this->getTokenOptions())
+        $response = $this->requestRaw(
+            EtcdEndpoint::RANGE,
+            [
+                'key' => trim(base64_encode($key)),
+                'range_end' => trim(base64_encode($rangeEnd)),
+            ]
         );
 
         return new RangeResponse(json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR));
@@ -54,16 +46,12 @@ final class EtcdRestKv extends AbstractEtcdRestService implements EtcdKvServiceI
 
     public function put(string $key, string $value): bool
     {
-        /** @var array{body: string, headers?: array<string, string>} $options */
-        $options = [
-            RequestOptions::BODY => json_encode(
-                ['key' => base64_encode(trim($key)), 'value' => base64_encode(trim($value))],
-                JSON_THROW_ON_ERROR
-            ),
-        ];
-        $response = $this->connection->client->post(
-            $this->connection->host . EtcdEndpoint::ETCD_VERSION . EtcdEndpoint::PUT,
-            array_merge($options, $this->getTokenOptions())
+        $response = $this->requestRaw(
+            EtcdEndpoint::PUT,
+            [
+                'key' => base64_encode(trim($key)),
+                'value' => base64_encode(trim($value)),
+            ]
         );
 
         return 200 === $response->getStatusCode();
@@ -72,7 +60,7 @@ final class EtcdRestKv extends AbstractEtcdRestService implements EtcdKvServiceI
     /**
      * @throws GuzzleException|JsonException
      */
-    public function deleteRange(string $key, string $rangeEnd = ''): array
+    public function deleteRange(string $key, string $rangeEnd = ''): DeleteRangeResponse
     {
         $body = ['key' => base64_encode(trim($key))];
 
@@ -80,25 +68,26 @@ final class EtcdRestKv extends AbstractEtcdRestService implements EtcdKvServiceI
             $body['range_end'] = base64_encode(trim($rangeEnd));
         }
 
-        return $this->request(EtcdEndpoint::DELETE_RANGE, $body);
+        return new DeleteRangeResponse($this->request(EtcdEndpoint::DELETE_RANGE, $body));
     }
 
     /**
      * @param array<int, array<string, mixed>> $compare
      * @param array<int, array<string, mixed>> $success
      * @param array<int, array<string, mixed>> $failure
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function txn(array $compare, array $success, array $failure): array
+    public function txn(array $compare, array $success, array $failure): TxnResponse
     {
-        return $this->request(
-            EtcdEndpoint::TXN,
-            [
-                'compare' => $this->transformCompares($compare),
-                'success' => $this->transformRequestOps($success),
-                'failure' => $this->transformRequestOps($failure),
-            ]
+        return new TxnResponse(
+            $this->request(
+                EtcdEndpoint::TXN,
+                [
+                    'compare' => $this->transformCompares($compare),
+                    'success' => $this->transformRequestOps($success),
+                    'failure' => $this->transformRequestOps($failure),
+                ]
+            )
         );
     }
 

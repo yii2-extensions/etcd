@@ -8,12 +8,17 @@ use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use Yii2\Extensions\Etcd\EtcdAuthServiceInterface;
 use Yii2\Extensions\Etcd\EtcdEndpoint;
+use Yii2\Extensions\Etcd\Responses\AuthStatusResponse;
+use Yii2\Extensions\Etcd\Responses\RoleGetResponse;
+use Yii2\Extensions\Etcd\Responses\RoleListResponse;
+use Yii2\Extensions\Etcd\Responses\UserGetResponse;
+use Yii2\Extensions\Etcd\Responses\UserListResponse;
 
 final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServiceInterface
 {
     public function authenticate(): string
     {
-        return $this->authenticator()->authenticate();
+        return $this->tokenProvider()->authenticate();
     }
 
     /**
@@ -33,12 +38,11 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     }
 
     /**
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function authStatus(): array
+    public function authStatus(): AuthStatusResponse
     {
-        return $this->request(EtcdEndpoint::AUTH_STATUS, []);
+        return new AuthStatusResponse($this->request(EtcdEndpoint::AUTH_STATUS, []));
     }
 
     /**
@@ -56,21 +60,19 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     }
 
     /**
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function userGet(string $name): array
+    public function userGet(string $name): UserGetResponse
     {
-        return $this->request(EtcdEndpoint::USER_GET, ['name' => $name]);
+        return new UserGetResponse($this->request(EtcdEndpoint::USER_GET, ['name' => $name]));
     }
 
     /**
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function userList(): array
+    public function userList(): UserListResponse
     {
-        return $this->request(EtcdEndpoint::USER_LIST, []);
+        return new UserListResponse($this->request(EtcdEndpoint::USER_LIST, []));
     }
 
     /**
@@ -116,21 +118,19 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     }
 
     /**
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function roleGet(string $name): array
+    public function roleGet(string $name): RoleGetResponse
     {
-        return $this->request(EtcdEndpoint::ROLE_GET, ['role' => $name]);
+        return new RoleGetResponse($this->request(EtcdEndpoint::ROLE_GET, ['role' => $name]));
     }
 
     /**
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function roleList(): array
+    public function roleList(): RoleListResponse
     {
-        return $this->request(EtcdEndpoint::ROLE_LIST, []);
+        return new RoleListResponse($this->request(EtcdEndpoint::ROLE_LIST, []));
     }
 
     /**

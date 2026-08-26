@@ -8,16 +8,20 @@ use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use Yii2\Extensions\Etcd\EtcdEndpoint;
 use Yii2\Extensions\Etcd\EtcdLeaseServiceInterface;
+use Yii2\Extensions\Etcd\Responses\LeaseGrantResponse;
+use Yii2\Extensions\Etcd\Responses\LeaseLeasesResponse;
+use Yii2\Extensions\Etcd\Responses\LeaseTimeToLiveResponse;
 
 final class EtcdRestLease extends AbstractEtcdRestService implements EtcdLeaseServiceInterface
 {
     /**
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function leaseGrant(int $ttl, int $id = 0): array
+    public function leaseGrant(int $ttl, int $id = 0): LeaseGrantResponse
     {
-        return $this->request(EtcdEndpoint::LEASE_GRANT, ['TTL' => (string) $ttl, 'ID' => (string) $id]);
+        return new LeaseGrantResponse(
+            $this->request(EtcdEndpoint::LEASE_GRANT, ['TTL' => (string) $ttl, 'ID' => (string) $id])
+        );
     }
 
     /**
@@ -29,20 +33,20 @@ final class EtcdRestLease extends AbstractEtcdRestService implements EtcdLeaseSe
     }
 
     /**
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function leaseTimeToLive(int $id, bool $keys = false): array
+    public function leaseTimeToLive(int $id, bool $keys = false): LeaseTimeToLiveResponse
     {
-        return $this->request(EtcdEndpoint::LEASE_TIME_TO_LIVE, ['ID' => (string) $id, 'keys' => $keys]);
+        return new LeaseTimeToLiveResponse(
+            $this->request(EtcdEndpoint::LEASE_TIME_TO_LIVE, ['ID' => (string) $id, 'keys' => $keys])
+        );
     }
 
     /**
-     * @return array<string, mixed>
      * @throws GuzzleException|JsonException
      */
-    public function leaseLeases(): array
+    public function leaseLeases(): LeaseLeasesResponse
     {
-        return $this->request(EtcdEndpoint::LEASE_LEASES, []);
+        return new LeaseLeasesResponse($this->request(EtcdEndpoint::LEASE_LEASES, []));
     }
 }

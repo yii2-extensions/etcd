@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Yii2\Extensions\Etcd;
 
+use Yii2\Extensions\Etcd\Responses\LeaseGrantResponse;
+use Yii2\Extensions\Etcd\Responses\LeaseLeasesResponse;
+use Yii2\Extensions\Etcd\Responses\LeaseTimeToLiveResponse;
+
 interface EtcdLeaseServiceInterface
 {
     /**
      * Creates a lease which expires if the server does not receive a keepAlive within a given TTL period.
-     *
-     * @return array<string, mixed> response fields: header, ID, TTL, error
      */
-    public function leaseGrant(int $ttl, int $id = 0): array;
+    public function leaseGrant(int $ttl, int $id = 0): LeaseGrantResponse;
 
     /**
      * Revokes a lease. All keys attached to the lease will expire and be deleted.
@@ -20,15 +22,11 @@ interface EtcdLeaseServiceInterface
 
     /**
      * Retrieves lease information.
-     *
-     * @return array<string, mixed> response fields: header, ID, TTL, grantedTTL, keys
      */
-    public function leaseTimeToLive(int $id, bool $keys = false): array;
+    public function leaseTimeToLive(int $id, bool $keys = false): LeaseTimeToLiveResponse;
 
     /**
      * Lists all existing leases.
-     *
-     * @return array<string, mixed> response fields: header, leases
      */
-    public function leaseLeases(): array;
+    public function leaseLeases(): LeaseLeasesResponse;
 }
