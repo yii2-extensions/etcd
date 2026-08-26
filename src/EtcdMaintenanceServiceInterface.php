@@ -16,11 +16,8 @@ interface EtcdMaintenanceServiceInterface
 
     /**
      * Activates, deactivates, and queries alarms regarding cluster health.
-     *
-     * @param string $action one of {@see AlarmAction} values
-     * @param string $alarmType one of {@see AlarmType} values
      */
-    public function alarm(string $action, int|string $memberId = 0, string $alarmType = AlarmType::NONE): AlarmResponse;
+    public function alarm(AlarmAction $action, int|string $memberId = 0, AlarmType $alarmType = AlarmType::NONE): AlarmResponse;
 
     /**
      * Gets the status of the member.
@@ -49,8 +46,6 @@ interface EtcdMaintenanceServiceInterface
 
     /**
      * Requests downgrades, verifies feasibility or cancels downgrade on the cluster version.
-     *
-     * @param string $action one of {@see DowngradeAction} values
      */
-    public function downgrade(string $action, string $version = ''): DowngradeResponse;
+    public function downgrade(DowngradeAction $action, string $version = ''): DowngradeResponse;
 }

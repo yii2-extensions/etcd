@@ -27,6 +27,7 @@ use Etcd\Permission\Type as EtcdPermissionType;
 use Etcd\UserAddOptions;
 use Google\Protobuf\Internal\RepeatedField;
 use Yii2\Extensions\Etcd\EtcdAuthServiceInterface;
+use Yii2\Extensions\Etcd\PermissionType;
 use Yii2\Extensions\Etcd\Responses\AuthStatusResponse;
 use Yii2\Extensions\Etcd\Responses\RoleGetResponse;
 use Yii2\Extensions\Etcd\Responses\RoleListResponse;
@@ -42,11 +43,13 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         return $this->client ??= new AuthClient($this->connection->host, $this->getConnectionOptions());
     }
 
+    #[\Override]
     public function authenticate(): string
     {
         return $this->tokenProvider()->authenticate();
     }
 
+    #[\Override]
     public function authEnable(): bool
     {
         $this->wait($this->getClient()->AuthEnable(new AuthEnableRequest()));
@@ -54,6 +57,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         return true;
     }
 
+    #[\Override]
     public function authDisable(): bool
     {
         $this->wait($this->getClient()->AuthDisable(new AuthDisableRequest()));
@@ -61,6 +65,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         return true;
     }
 
+    #[\Override]
     public function authStatus(): AuthStatusResponse
     {
         /** @var EtcdAuthStatusResponse $response */
@@ -73,6 +78,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         ]);
     }
 
+    #[\Override]
     public function userAdd(string $name, string $password, bool $noPassword = false): bool
     {
         $request = new AuthUserAddRequest();
@@ -88,6 +94,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         return true;
     }
 
+    #[\Override]
     public function userGet(string $name): UserGetResponse
     {
         $request = new AuthUserGetRequest();
@@ -102,6 +109,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         ]);
     }
 
+    #[\Override]
     public function userList(): UserListResponse
     {
         /** @var \Etcd\AuthUserListResponse $response */
@@ -113,6 +121,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         ]);
     }
 
+    #[\Override]
     public function userDelete(string $name): bool
     {
         $request = new AuthUserDeleteRequest();
@@ -123,6 +132,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         return true;
     }
 
+    #[\Override]
     public function userChangePassword(string $name, string $password): bool
     {
         $request = new AuthUserChangePasswordRequest();
@@ -134,6 +144,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         return true;
     }
 
+    #[\Override]
     public function userGrantRole(string $user, string $role): bool
     {
         $request = new AuthUserGrantRoleRequest();
@@ -145,6 +156,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         return true;
     }
 
+    #[\Override]
     public function userRevokeRole(string $user, string $role): bool
     {
         $request = new AuthUserRevokeRoleRequest();
@@ -156,6 +168,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         return true;
     }
 
+    #[\Override]
     public function roleAdd(string $name): bool
     {
         $request = new AuthRoleAddRequest();
@@ -166,6 +179,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         return true;
     }
 
+    #[\Override]
     public function roleGet(string $name): RoleGetResponse
     {
         $request = new AuthRoleGetRequest();
@@ -180,6 +194,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         ]);
     }
 
+    #[\Override]
     public function roleList(): RoleListResponse
     {
         /** @var \Etcd\AuthRoleListResponse $response */
@@ -191,6 +206,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         ]);
     }
 
+    #[\Override]
     public function roleDelete(string $name): bool
     {
         $request = new AuthRoleDeleteRequest();
@@ -201,10 +217,11 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         return true;
     }
 
-    public function roleGrantPermission(string $name, string $permType, string $key, string $rangeEnd = ''): bool
+    #[\Override]
+    public function roleGrantPermission(string $name, PermissionType $permType, string $key, string $rangeEnd = ''): bool
     {
         $perm = new Permission();
-        $perm->setPermType((int) EtcdPermissionType::value($permType));
+        $perm->setPermType((int) EtcdPermissionType::value($permType->value));
         $perm->setKey($key);
 
         if ('' !== $rangeEnd) {
@@ -220,6 +237,7 @@ final class EtcdGrpcAuth extends AbstractEtcdGrpcService implements EtcdAuthServ
         return true;
     }
 
+    #[\Override]
     public function roleRevokePermission(string $role, string $key, string $rangeEnd = ''): bool
     {
         $request = new AuthRoleRevokePermissionRequest();

@@ -17,6 +17,7 @@ final class EtcdRestLease extends AbstractEtcdRestService implements EtcdLeaseSe
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function leaseGrant(int $ttl, int $id = 0): LeaseGrantResponse
     {
         return new LeaseGrantResponse(
@@ -27,6 +28,7 @@ final class EtcdRestLease extends AbstractEtcdRestService implements EtcdLeaseSe
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function leaseRevoke(int $id): bool
     {
         return isset($this->request(EtcdEndpoint::LEASE_REVOKE, ['ID' => (string) $id])['header']);
@@ -35,6 +37,7 @@ final class EtcdRestLease extends AbstractEtcdRestService implements EtcdLeaseSe
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function leaseTimeToLive(int $id, bool $keys = false): LeaseTimeToLiveResponse
     {
         return new LeaseTimeToLiveResponse(
@@ -45,6 +48,7 @@ final class EtcdRestLease extends AbstractEtcdRestService implements EtcdLeaseSe
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function leaseLeases(): LeaseLeasesResponse
     {
         return new LeaseLeasesResponse($this->request(EtcdEndpoint::LEASE_LEASES, []));

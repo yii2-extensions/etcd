@@ -7,11 +7,9 @@ namespace Yii2\Extensions\Etcd;
 /**
  * Alarm request actions (matches `etcdserverpb.AlarmRequest.AlarmAction`)
  */
-final class AlarmAction
+enum AlarmAction: string
 {
-    public const string GET = 'GET';
-
-    public const string ACTIVATE = 'ACTIVATE';
-
-    public const string DEACTIVATE = 'DEACTIVATE';
+    case GET = 'GET';
+    case ACTIVATE = 'ACTIVATE';
+    case DEACTIVATE = 'DEACTIVATE';
 }

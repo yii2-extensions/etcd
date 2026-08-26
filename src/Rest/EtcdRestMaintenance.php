@@ -6,6 +6,9 @@ namespace Yii2\Extensions\Etcd\Rest;
 
 use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
+use Yii2\Extensions\Etcd\AlarmAction;
+use Yii2\Extensions\Etcd\AlarmType;
+use Yii2\Extensions\Etcd\DowngradeAction;
 use Yii2\Extensions\Etcd\EtcdEndpoint;
 use Yii2\Extensions\Etcd\EtcdMaintenanceServiceInterface;
 use Yii2\Extensions\Etcd\Responses\AlarmResponse;
@@ -20,6 +23,7 @@ final class EtcdRestMaintenance extends AbstractEtcdRestService implements EtcdM
      * @return string
      * @throws GuzzleException
      */
+    #[\Override]
     public function getVersion(): string
     {
         $response = $this->connection->client->get($this->connection->host . EtcdEndpoint::VERSION);
@@ -30,12 +34,13 @@ final class EtcdRestMaintenance extends AbstractEtcdRestService implements EtcdM
     /**
      * @throws GuzzleException|JsonException
      */
-    public function alarm(string $action, int|string $memberId = 0, string $alarmType = 'NONE'): AlarmResponse
+    #[\Override]
+    public function alarm(AlarmAction $action, int|string $memberId = 0, AlarmType $alarmType = AlarmType::NONE): AlarmResponse
     {
         return new AlarmResponse(
             $this->request(
                 EtcdEndpoint::ALARM,
-                ['action' => $action, 'memberID' => (string) $memberId, 'alarm' => $alarmType]
+                ['action' => $action->value, 'memberID' => (string) $memberId, 'alarm' => $alarmType->value]
             )
         );
     }
@@ -43,6 +48,7 @@ final class EtcdRestMaintenance extends AbstractEtcdRestService implements EtcdM
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function status(): StatusResponse
     {
         return new StatusResponse($this->request(EtcdEndpoint::STATUS, []));
@@ -51,6 +57,7 @@ final class EtcdRestMaintenance extends AbstractEtcdRestService implements EtcdM
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function defragment(): bool
     {
         $this->request(EtcdEndpoint::DEFRAGMENT, []);
@@ -61,6 +68,7 @@ final class EtcdRestMaintenance extends AbstractEtcdRestService implements EtcdM
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function hash(): HashResponse
     {
         return new HashResponse($this->request(EtcdEndpoint::HASH, []));
@@ -69,6 +77,7 @@ final class EtcdRestMaintenance extends AbstractEtcdRestService implements EtcdM
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function hashKv(int $revision = 0): HashKvResponse
     {
         return new HashKvResponse($this->request(EtcdEndpoint::HASH_KV, ['revision' => (string) $revision]));
@@ -77,6 +86,7 @@ final class EtcdRestMaintenance extends AbstractEtcdRestService implements EtcdM
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function moveLeader(int|string $targetId): bool
     {
         $this->request(EtcdEndpoint::MOVE_LEADER, ['targetID' => (string) $targetId]);
@@ -87,8 +97,11 @@ final class EtcdRestMaintenance extends AbstractEtcdRestService implements EtcdM
     /**
      * @throws GuzzleException|JsonException
      */
-    public function downgrade(string $action, string $version = ''): DowngradeResponse
+    #[\Override]
+    public function downgrade(DowngradeAction $action, string $version = ''): DowngradeResponse
     {
-        return new DowngradeResponse($this->request(EtcdEndpoint::DOWNGRADE, ['action' => $action, 'version' => $version]));
+        return new DowngradeResponse(
+            $this->request(EtcdEndpoint::DOWNGRADE, ['action' => $action->value, 'version' => $version])
+        );
     }
 }

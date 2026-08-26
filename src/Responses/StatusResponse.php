@@ -4,36 +4,36 @@ declare(strict_types=1);
 
 namespace Yii2\Extensions\Etcd\Responses;
 
-final class StatusResponse
+final readonly class StatusResponse
 {
     /** @var array<string, mixed> */
-    public array $header = [];
+    public readonly array $header;
 
-    public string $version = '';
+    public readonly string $version;
 
-    public int $dbSize = 0;
+    public readonly int $dbSize;
 
-    public int|string $leader = 0;
+    public readonly int|string $leader;
 
-    public int $raftIndex = 0;
+    public readonly int $raftIndex;
 
-    public int $raftTerm = 0;
+    public readonly int $raftTerm;
 
-    public int $raftAppliedIndex = 0;
+    public readonly int $raftAppliedIndex;
 
     /** @var array<int, string> */
-    public array $errors = [];
+    public readonly array $errors;
 
-    public int $dbSizeInUse = 0;
+    public readonly int $dbSizeInUse;
 
-    public bool $isLearner = false;
+    public readonly bool $isLearner;
 
-    public string $storageVersion = '';
+    public readonly string $storageVersion;
 
-    public int $dbSizeQuota = 0;
+    public readonly int $dbSizeQuota;
 
     /** @var array<string, mixed> */
-    public array $downgradeInfo = [];
+    public readonly array $downgradeInfo;
 
     /**
      * @param array<string, mixed> $data

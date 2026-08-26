@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Yii2\Extensions\Etcd\Responses;
 
-final class LeaseTimeToLiveResponse
+final readonly class LeaseTimeToLiveResponse
 {
     /** @var array<string, mixed> */
-    public array $header = [];
+    public readonly array $header;
 
-    public int|string $ID = 0;
+    public readonly int|string $ID;
 
-    public int $TTL = 0;
+    public readonly int $TTL;
 
-    public int $grantedTTL = 0;
+    public readonly int $grantedTTL;
 
     /** @var array<int, string> */
-    public array $keys = [];
+    public readonly array $keys;
 
     /**
      * @param array<string, mixed> $data

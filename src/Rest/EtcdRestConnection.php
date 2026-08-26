@@ -14,10 +14,10 @@ use Yii2\Extensions\Etcd\EtcdMaintenanceServiceInterface;
 
 final class EtcdRestConnection implements EtcdConnectionInterface
 {
-    public string $host = '';
-    public string $user = '';
-    public string $password = '';
-    public Client $client;
+    public private(set) string $host = '';
+    public private(set) string $user = '';
+    public private(set) string $password = '';
+    public private(set) Client $client;
 
     private ?EtcdRestKv $kv = null;
     private ?EtcdRestAuth $auth = null;
@@ -39,26 +39,31 @@ final class EtcdRestConnection implements EtcdConnectionInterface
         $this->client = new Client($clientOptions);
     }
 
+    #[\Override]
     public function getKv(): EtcdKvServiceInterface
     {
         return $this->kv ??= new EtcdRestKv($this);
     }
 
+    #[\Override]
     public function getAuth(): EtcdAuthServiceInterface
     {
         return $this->auth ??= new EtcdRestAuth($this);
     }
 
+    #[\Override]
     public function getCluster(): EtcdClusterServiceInterface
     {
         return $this->cluster ??= new EtcdRestCluster($this);
     }
 
+    #[\Override]
     public function getMaintenance(): EtcdMaintenanceServiceInterface
     {
         return $this->maintenance ??= new EtcdRestMaintenance($this);
     }
 
+    #[\Override]
     public function getLease(): EtcdLeaseServiceInterface
     {
         return $this->lease ??= new EtcdRestLease($this);

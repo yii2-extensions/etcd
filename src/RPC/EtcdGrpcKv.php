@@ -34,6 +34,7 @@ final class EtcdGrpcKv extends AbstractEtcdGrpcService implements EtcdKvServiceI
         return $this->client ??= new KVClient($this->connection->host, $this->getConnectionOptions());
     }
 
+    #[\Override]
     public function getRange(string $key, string $rangeEnd): RangeResponse
     {
         $request = new RangeRequest();
@@ -46,6 +47,7 @@ final class EtcdGrpcKv extends AbstractEtcdGrpcService implements EtcdKvServiceI
         return new RangeResponse($this->collectKvs($response->getKvs()));
     }
 
+    #[\Override]
     public function getKey(string $key): RangeResponse
     {
         $request = new RangeRequest();
@@ -57,6 +59,7 @@ final class EtcdGrpcKv extends AbstractEtcdGrpcService implements EtcdKvServiceI
         return new RangeResponse($this->collectKvs($response->getKvs()));
     }
 
+    #[\Override]
     public function put(string $key, string $value): bool
     {
         $request = new PutRequest();
@@ -68,6 +71,7 @@ final class EtcdGrpcKv extends AbstractEtcdGrpcService implements EtcdKvServiceI
         return true;
     }
 
+    #[\Override]
     public function deleteRange(string $key, string $rangeEnd = ''): DeleteRangeResponse
     {
         $request = new DeleteRangeRequest();
@@ -83,6 +87,7 @@ final class EtcdGrpcKv extends AbstractEtcdGrpcService implements EtcdKvServiceI
         return new DeleteRangeResponse($this->convertDeleteRangeResponse($response));
     }
 
+    #[\Override]
     public function txn(array $compare, array $success, array $failure): TxnResponse
     {
         $request = new TxnRequest();
@@ -96,6 +101,7 @@ final class EtcdGrpcKv extends AbstractEtcdGrpcService implements EtcdKvServiceI
         return new TxnResponse($this->convertTxnResponse($response));
     }
 
+    #[\Override]
     public function compact(int $revision, bool $physical = false): bool
     {
         $request = new CompactionRequest();

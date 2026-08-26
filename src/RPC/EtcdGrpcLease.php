@@ -27,6 +27,7 @@ final class EtcdGrpcLease extends AbstractEtcdGrpcService implements EtcdLeaseSe
         return $this->client ??= new LeaseClient($this->connection->host, $this->getConnectionOptions());
     }
 
+    #[\Override]
     public function leaseGrant(int $ttl, int $id = 0): LeaseGrantResponse
     {
         $request = new LeaseGrantRequest();
@@ -44,6 +45,7 @@ final class EtcdGrpcLease extends AbstractEtcdGrpcService implements EtcdLeaseSe
         ]);
     }
 
+    #[\Override]
     public function leaseRevoke(int $id): bool
     {
         $request = new LeaseRevokeRequest();
@@ -54,6 +56,7 @@ final class EtcdGrpcLease extends AbstractEtcdGrpcService implements EtcdLeaseSe
         return true;
     }
 
+    #[\Override]
     public function leaseTimeToLive(int $id, bool $keys = false): LeaseTimeToLiveResponse
     {
         $request = new LeaseTimeToLiveRequest();
@@ -72,6 +75,7 @@ final class EtcdGrpcLease extends AbstractEtcdGrpcService implements EtcdLeaseSe
         ]);
     }
 
+    #[\Override]
     public function leaseLeases(): LeaseLeasesResponse
     {
         /** @var EtcdLeaseLeasesResponse $response */

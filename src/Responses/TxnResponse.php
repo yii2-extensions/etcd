@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Yii2\Extensions\Etcd\Responses;
 
-final class TxnResponse
+final readonly class TxnResponse
 {
     /** @var array<string, mixed> */
-    public array $header = [];
+    public readonly array $header;
 
-    public bool $succeeded = false;
+    public readonly bool $succeeded;
 
     /** @var array<int, array<string, mixed>> */
-    public array $responses = [];
+    public readonly array $responses;
 
     /**
      * @param array<string, mixed> $data

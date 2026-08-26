@@ -102,9 +102,9 @@ final class EtcdHttpTest extends TestCase
         $etcd->getKv()->put($key, 'value-1');
 
         $result = $etcd->getKv()->txn(
-            [['result' => 'EQUAL', 'target' => 'VERSION', 'key' => $key, 'version' => 1]],
-            [['request_put' => ['key' => $key, 'value' => 'value-2']]],
-            []
+            compare: [['result' => 'EQUAL', 'target' => 'VERSION', 'key' => $key, 'version' => 1]],
+            success: [['request_put' => ['key' => $key, 'value' => 'value-2']]],
+            failure: []
         );
 
         self::assertTrue($result->succeeded);
@@ -121,14 +121,14 @@ final class EtcdHttpTest extends TestCase
         $etcd->getKv()->put($key . '-ignored', 'ignored-before');
 
         $result = $etcd->getKv()->txn(
-            [
+            compare: [
                 ['result' => 0, 'target' => 0, 'key' => $key, 'range_end' => '', 'version' => 1],
                 ['result' => 'GREATER', 'target' => 'CREATE', 'key' => $key, 'create_revision' => 0],
                 ['result' => 'GREATER', 'target' => 'MOD', 'key' => $key, 'mod_revision' => 0],
                 ['result' => 'EQUAL', 'target' => 'LEASE', 'key' => $key, 'lease' => 0],
                 ['result' => 'EQUAL', 'target' => 'VALUE', 'key' => $key, 'value' => 'value-1'],
             ],
-            [
+            success: [
                 ['request_put' => ['key' => $key, 'value' => 'value-2', 'lease' => 0, 'prev_kv' => true]],
                 [
                     'request_range' => [
@@ -158,7 +158,7 @@ final class EtcdHttpTest extends TestCase
                 ],
                 ['request_put' => ['key' => $key . '-ignored', 'value' => '', 'ignore_value' => true, 'ignore_lease' => true]],
             ],
-            [
+            failure: [
                 [
                     'request_range' => [
                         'key' => 'txn-missing',
@@ -323,7 +323,7 @@ final class EtcdHttpTest extends TestCase
     {
         $etcd = new Etcd(['host' => ETCD_HOST]);
 
-        $addResult = $etcd->getCluster()->memberAdd(['http://127.0.0.1:2381'], true);
+        $addResult = $etcd->getCluster()->memberAdd(['http://127.0.0.1:2381'], isLearner: true);
 
         self::assertObjectHasProperty('member', $addResult);
         self::assertArrayHasKey('ID', $addResult->member);
@@ -335,7 +335,7 @@ final class EtcdHttpTest extends TestCase
             $members = $etcd->getCluster()->memberList();
 
             self::assertObjectHasProperty('members', $members);
-            self::assertContains($memberId, array_map('strval', array_column($members->members, 'ID')));
+            self::assertContains($memberId, array_map(strval(...), array_column($members->members, 'ID')));
 
             $updateResult = $etcd->getCluster()->memberUpdate($memberId, ['http://127.0.0.1:2382']);
 
@@ -345,7 +345,7 @@ final class EtcdHttpTest extends TestCase
             $removeResult = $etcd->getCluster()->memberRemove($memberId);
 
             self::assertObjectHasProperty('members', $removeResult);
-            self::assertNotContains($memberId, array_map('strval', array_column($removeResult->members, 'ID')));
+            self::assertNotContains($memberId, array_map(strval(...), array_column($removeResult->members, 'ID')));
         } finally {
             try {
                 $etcd->getCluster()->memberRemove($memberId);
@@ -387,7 +387,7 @@ final class EtcdHttpTest extends TestCase
             self::assertTrue($etcd->getAuth()->userAdd('alice', 'pw1'));
             self::assertContains('alice', $etcd->getAuth()->userList()->users);
             self::assertTrue($etcd->getAuth()->userChangePassword('alice', 'pw2'));
-            self::assertTrue($etcd->getAuth()->userAdd('nopass', '', true));
+            self::assertTrue($etcd->getAuth()->userAdd('nopass', '', noPassword: true));
             $users = $etcd->getAuth()->userList();
             self::assertContains('nopass', $users->users);
             self::assertTrue($etcd->getAuth()->userGrantRole('alice', $rootUser));
@@ -397,7 +397,7 @@ final class EtcdHttpTest extends TestCase
 
             self::assertTrue($etcd->getAuth()->roleAdd('viewer'));
             self::assertContains('viewer', $etcd->getAuth()->roleList()->roles);
-            self::assertTrue($etcd->getAuth()->roleGrantPermission('viewer', PermissionType::READ, '/foo', '/fop'));
+            self::assertTrue($etcd->getAuth()->roleGrantPermission(name: 'viewer', permType: PermissionType::READ, key: '/foo', rangeEnd: '/fop'));
 
             $role = $etcd->getAuth()->roleGet('viewer');
             self::assertNotEmpty($role->perm);
@@ -435,12 +435,9 @@ final class EtcdHttpTest extends TestCase
      */
     private function findMember(array $members, string $id): array
     {
-        foreach ($members as $member) {
-            if ((string) ($member['ID'] ?? '') === $id) {
-                return $member;
-            }
-        }
-
-        return [];
+        return array_find(
+            $members,
+            static fn (array $member): bool => (string) ($member['ID'] ?? '') === $id
+        ) ?? [];
     }
 }
