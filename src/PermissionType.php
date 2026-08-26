@@ -7,11 +7,9 @@ namespace Yii2\Extensions\Etcd;
 /**
  * Permission types (matches `authpb.Permission.Type`)
  */
-final class PermissionType
+enum PermissionType: string
 {
-    public const string READ = 'READ';
-
-    public const string WRITE = 'WRITE';
-
-    public const string READWRITE = 'READWRITE';
+    case READ = 'READ';
+    case WRITE = 'WRITE';
+    case READWRITE = 'READWRITE';
 }

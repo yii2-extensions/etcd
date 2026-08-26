@@ -13,6 +13,7 @@ use Yii2\Extensions\Etcd\Responses\TxnResponse;
 
 final class EtcdRestKv extends AbstractEtcdRestService implements EtcdKvServiceInterface
 {
+    #[\Override]
     public function getKey(string $key): RangeResponse
     {
         $response = $this->requestRaw(
@@ -31,6 +32,7 @@ final class EtcdRestKv extends AbstractEtcdRestService implements EtcdKvServiceI
      * @return RangeResponse
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function getRange(string $key, string $rangeEnd): RangeResponse
     {
         $response = $this->requestRaw(
@@ -44,6 +46,7 @@ final class EtcdRestKv extends AbstractEtcdRestService implements EtcdKvServiceI
         return new RangeResponse(json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR));
     }
 
+    #[\Override]
     public function put(string $key, string $value): bool
     {
         $response = $this->requestRaw(
@@ -60,6 +63,7 @@ final class EtcdRestKv extends AbstractEtcdRestService implements EtcdKvServiceI
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function deleteRange(string $key, string $rangeEnd = ''): DeleteRangeResponse
     {
         $body = ['key' => base64_encode(trim($key))];
@@ -77,6 +81,7 @@ final class EtcdRestKv extends AbstractEtcdRestService implements EtcdKvServiceI
      * @param array<int, array<string, mixed>> $failure
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function txn(array $compare, array $success, array $failure): TxnResponse
     {
         return new TxnResponse(
@@ -94,6 +99,7 @@ final class EtcdRestKv extends AbstractEtcdRestService implements EtcdKvServiceI
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function compact(int $revision, bool $physical = false): bool
     {
         $result = $this->request(

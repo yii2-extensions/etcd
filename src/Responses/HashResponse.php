@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Yii2\Extensions\Etcd\Responses;
 
-final class HashResponse
+final readonly class HashResponse
 {
     /** @var array<string, mixed> */
-    public array $header = [];
+    public readonly array $header;
 
-    public int $hash = 0;
+    public readonly int $hash;
 
     /**
      * @param array<string, mixed> $data

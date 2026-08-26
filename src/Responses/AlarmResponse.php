@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Yii2\Extensions\Etcd\Responses;
 
-final class AlarmResponse
+final readonly class AlarmResponse
 {
     /** @var array<string, mixed> */
-    public array $header = [];
+    public readonly array $header;
 
     /** @var array<int, array<string, mixed>> */
-    public array $alarms = [];
+    public readonly array $alarms;
 
     /**
      * @param array<string, mixed> $data

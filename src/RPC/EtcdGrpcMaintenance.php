@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Yii2\Extensions\Etcd\RPC;
 
 use Etcd\AlarmRequest;
-use Etcd\AlarmRequest\AlarmAction;
-use Etcd\AlarmType;
+use Etcd\AlarmRequest\AlarmAction as EtcdAlarmAction;
+use Etcd\AlarmType as EtcdAlarmType;
 use Etcd\DowngradeRequest;
-use Etcd\DowngradeRequest\DowngradeAction;
+use Etcd\DowngradeRequest\DowngradeAction as EtcdDowngradeAction;
 use Etcd\HashKVRequest;
 use Etcd\HashKVResponse as EtcdHashKVResponse;
 use Etcd\HashRequest;
@@ -18,6 +18,9 @@ use Etcd\MoveLeaderRequest;
 use Etcd\StatusRequest;
 use Etcd\StatusResponse as EtcdStatusResponse;
 use Google\Protobuf\Internal\RepeatedField;
+use Yii2\Extensions\Etcd\AlarmAction;
+use Yii2\Extensions\Etcd\AlarmType;
+use Yii2\Extensions\Etcd\DowngradeAction;
 use Yii2\Extensions\Etcd\EtcdMaintenanceServiceInterface;
 use Yii2\Extensions\Etcd\Responses\AlarmResponse;
 use Yii2\Extensions\Etcd\Responses\DowngradeResponse;
@@ -34,17 +37,19 @@ final class EtcdGrpcMaintenance extends AbstractEtcdGrpcService implements EtcdM
         return $this->client ??= new MaintenanceClient($this->connection->host, $this->getConnectionOptions());
     }
 
+    #[\Override]
     public function getVersion(): string
     {
         return 'Not supported';
     }
 
-    public function alarm(string $action, int|string $memberId = 0, string $alarmType = 'NONE'): AlarmResponse
+    #[\Override]
+    public function alarm(AlarmAction $action, int|string $memberId = 0, AlarmType $alarmType = AlarmType::NONE): AlarmResponse
     {
         $request = new AlarmRequest();
-        $request->setAction((int) AlarmAction::value($action));
+        $request->setAction((int) EtcdAlarmAction::value($action->value));
         $request->setMemberID($memberId);
-        $request->setAlarm((int) AlarmType::value($alarmType));
+        $request->setAlarm((int) EtcdAlarmType::value($alarmType->value));
 
         /** @var \Etcd\AlarmResponse $response */
         $response = $this->wait($this->getClient()->Alarm($request));
@@ -57,7 +62,7 @@ final class EtcdGrpcMaintenance extends AbstractEtcdGrpcService implements EtcdM
         foreach ($alarmList as $alarm) {
             $alarms[] = [
                 'memberID' => $alarm->getMemberID(),
-                'alarm' => AlarmType::name($alarm->getAlarm()),
+                'alarm' => EtcdAlarmType::name($alarm->getAlarm()),
             ];
         }
 
@@ -67,6 +72,7 @@ final class EtcdGrpcMaintenance extends AbstractEtcdGrpcService implements EtcdM
         ]);
     }
 
+    #[\Override]
     public function status(): StatusResponse
     {
         /** @var EtcdStatusResponse $response */
@@ -97,6 +103,7 @@ final class EtcdGrpcMaintenance extends AbstractEtcdGrpcService implements EtcdM
         return new StatusResponse($result);
     }
 
+    #[\Override]
     public function defragment(): bool
     {
         $this->wait($this->getClient()->Defragment(new \Etcd\DefragmentRequest()));
@@ -104,6 +111,7 @@ final class EtcdGrpcMaintenance extends AbstractEtcdGrpcService implements EtcdM
         return true;
     }
 
+    #[\Override]
     public function hash(): HashResponse
     {
         /** @var EtcdHashResponse $response */
@@ -115,6 +123,7 @@ final class EtcdGrpcMaintenance extends AbstractEtcdGrpcService implements EtcdM
         ]);
     }
 
+    #[\Override]
     public function hashKv(int $revision = 0): HashKvResponse
     {
         $request = new HashKVRequest();
@@ -131,6 +140,7 @@ final class EtcdGrpcMaintenance extends AbstractEtcdGrpcService implements EtcdM
         ]);
     }
 
+    #[\Override]
     public function moveLeader(int|string $targetId): bool
     {
         $request = new MoveLeaderRequest();
@@ -141,10 +151,11 @@ final class EtcdGrpcMaintenance extends AbstractEtcdGrpcService implements EtcdM
         return true;
     }
 
-    public function downgrade(string $action, string $version = ''): DowngradeResponse
+    #[\Override]
+    public function downgrade(DowngradeAction $action, string $version = ''): DowngradeResponse
     {
         $request = new DowngradeRequest();
-        $request->setAction((int) DowngradeAction::value($action));
+        $request->setAction((int) EtcdDowngradeAction::value($action->value));
 
         if ('' !== $version) {
             $request->setVersion($version);

@@ -20,6 +20,7 @@ final class EtcdRestCluster extends AbstractEtcdRestService implements EtcdClust
      * @param string[] $peerUrls
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function memberAdd(array $peerUrls, bool $isLearner = false): MemberAddResponse
     {
         return new MemberAddResponse(
@@ -30,6 +31,7 @@ final class EtcdRestCluster extends AbstractEtcdRestService implements EtcdClust
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function memberRemove(int|string $id): MemberRemoveResponse
     {
         return new MemberRemoveResponse($this->request(EtcdEndpoint::MEMBER_REMOVE, ['ID' => (string) $id]));
@@ -39,6 +41,7 @@ final class EtcdRestCluster extends AbstractEtcdRestService implements EtcdClust
      * @param string[] $peerUrls
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function memberUpdate(int|string $id, array $peerUrls): MemberUpdateResponse
     {
         return new MemberUpdateResponse(
@@ -49,6 +52,7 @@ final class EtcdRestCluster extends AbstractEtcdRestService implements EtcdClust
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function memberList(bool $linearizable = false): MemberListResponse
     {
         return new MemberListResponse(
@@ -59,6 +63,7 @@ final class EtcdRestCluster extends AbstractEtcdRestService implements EtcdClust
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function memberPromote(int|string $id): MemberPromoteResponse
     {
         return new MemberPromoteResponse($this->request(EtcdEndpoint::MEMBER_PROMOTE, ['ID' => (string) $id]));

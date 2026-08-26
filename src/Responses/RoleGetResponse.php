@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Yii2\Extensions\Etcd\Responses;
 
-final class RoleGetResponse
+final readonly class RoleGetResponse
 {
     /** @var array<string, mixed> */
-    public array $header = [];
+    public readonly array $header;
 
     /** @var array<int, array<string, mixed>> */
-    public array $perm = [];
+    public readonly array $perm;
 
     /**
      * @param array<string, mixed> $data

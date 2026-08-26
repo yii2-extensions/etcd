@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Yii2\Extensions\Etcd\Responses;
 
-final class DowngradeResponse
+final readonly class DowngradeResponse
 {
     /** @var array<string, mixed> */
-    public array $header = [];
+    public readonly array $header;
 
-    public string $version = '';
+    public readonly string $version;
 
     /**
      * @param array<string, mixed> $data

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Yii2\Extensions\Etcd\Responses;
 
-final class AuthStatusResponse
+final readonly class AuthStatusResponse
 {
     /** @var array<string, mixed> */
-    public array $header = [];
+    public readonly array $header;
 
-    public bool $enabled = false;
+    public readonly bool $enabled;
 
-    public int $authRevision = 0;
+    public readonly int $authRevision;
 
     /**
      * @param array<string, mixed> $data

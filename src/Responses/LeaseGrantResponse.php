@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Yii2\Extensions\Etcd\Responses;
 
-final class LeaseGrantResponse
+final readonly class LeaseGrantResponse
 {
     /** @var array<string, mixed> */
-    public array $header = [];
+    public readonly array $header;
 
-    public int|string $ID = 0;
+    public readonly int|string $ID;
 
-    public int $TTL = 0;
+    public readonly int $TTL;
 
-    public string $error = '';
+    public readonly string $error;
 
     /**
      * @param array<string, mixed> $data

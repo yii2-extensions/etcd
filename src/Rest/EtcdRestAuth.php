@@ -8,6 +8,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use Yii2\Extensions\Etcd\EtcdAuthServiceInterface;
 use Yii2\Extensions\Etcd\EtcdEndpoint;
+use Yii2\Extensions\Etcd\PermissionType;
 use Yii2\Extensions\Etcd\Responses\AuthStatusResponse;
 use Yii2\Extensions\Etcd\Responses\RoleGetResponse;
 use Yii2\Extensions\Etcd\Responses\RoleListResponse;
@@ -16,6 +17,7 @@ use Yii2\Extensions\Etcd\Responses\UserListResponse;
 
 final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServiceInterface
 {
+    #[\Override]
     public function authenticate(): string
     {
         return $this->tokenProvider()->authenticate();
@@ -24,6 +26,7 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function authEnable(): bool
     {
         return isset($this->request(EtcdEndpoint::AUTH_ENABLE, [])['header']);
@@ -32,6 +35,7 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function authDisable(): bool
     {
         return isset($this->request(EtcdEndpoint::AUTH_DISABLE, [])['header']);
@@ -40,6 +44,7 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function authStatus(): AuthStatusResponse
     {
         return new AuthStatusResponse($this->request(EtcdEndpoint::AUTH_STATUS, []));
@@ -48,6 +53,7 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function userAdd(string $name, string $password, bool $noPassword = false): bool
     {
         $body = ['name' => $name, 'password' => $password];
@@ -62,6 +68,7 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function userGet(string $name): UserGetResponse
     {
         return new UserGetResponse($this->request(EtcdEndpoint::USER_GET, ['name' => $name]));
@@ -70,6 +77,7 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function userList(): UserListResponse
     {
         return new UserListResponse($this->request(EtcdEndpoint::USER_LIST, []));
@@ -78,6 +86,7 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function userDelete(string $name): bool
     {
         return isset($this->request(EtcdEndpoint::USER_DELETE, ['name' => $name])['header']);
@@ -86,6 +95,7 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function userChangePassword(string $name, string $password): bool
     {
         return isset(
@@ -96,6 +106,7 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function userGrantRole(string $user, string $role): bool
     {
         return isset($this->request(EtcdEndpoint::USER_GRANT_ROLE, ['user' => $user, 'role' => $role])['header']);
@@ -104,6 +115,7 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function userRevokeRole(string $user, string $role): bool
     {
         return isset($this->request(EtcdEndpoint::USER_REVOKE_ROLE, ['name' => $user, 'role' => $role])['header']);
@@ -112,6 +124,7 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function roleAdd(string $name): bool
     {
         return isset($this->request(EtcdEndpoint::ROLE_ADD, ['name' => $name])['header']);
@@ -120,6 +133,7 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function roleGet(string $name): RoleGetResponse
     {
         return new RoleGetResponse($this->request(EtcdEndpoint::ROLE_GET, ['role' => $name]));
@@ -128,6 +142,7 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function roleList(): RoleListResponse
     {
         return new RoleListResponse($this->request(EtcdEndpoint::ROLE_LIST, []));
@@ -136,6 +151,7 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function roleDelete(string $name): bool
     {
         return isset($this->request(EtcdEndpoint::ROLE_DELETE, ['role' => $name])['header']);
@@ -144,9 +160,10 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     /**
      * @throws GuzzleException|JsonException
      */
-    public function roleGrantPermission(string $name, string $permType, string $key, string $rangeEnd = ''): bool
+    #[\Override]
+    public function roleGrantPermission(string $name, PermissionType $permType, string $key, string $rangeEnd = ''): bool
     {
-        $perm = ['permType' => $permType, 'key' => base64_encode(trim($key))];
+        $perm = ['permType' => $permType->value, 'key' => base64_encode(trim($key))];
 
         if ('' !== $rangeEnd) {
             $perm['range_end'] = base64_encode(trim($rangeEnd));
@@ -158,6 +175,7 @@ final class EtcdRestAuth extends AbstractEtcdRestService implements EtcdAuthServ
     /**
      * @throws GuzzleException|JsonException
      */
+    #[\Override]
     public function roleRevokePermission(string $role, string $key, string $rangeEnd = ''): bool
     {
         $body = ['role' => $role, 'key' => base64_encode(trim($key))];

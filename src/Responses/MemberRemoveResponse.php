@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Yii2\Extensions\Etcd\Responses;
 
-final class MemberRemoveResponse
+final readonly class MemberRemoveResponse
 {
     /** @var array<string, mixed> */
-    public array $header = [];
+    public readonly array $header;
 
     /** @var array<int, array<string, mixed>> */
-    public array $members = [];
+    public readonly array $members;
 
     /**
      * @param array<string, mixed> $data

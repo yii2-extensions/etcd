@@ -22,7 +22,11 @@
 - Fix: REST `moveLeader()` now returns `true` on success; the v3.7 gRPC gateway answers the request with an empty body which has no `header` field (`src/Rest/EtcdRestMaintenance.php`) (@s1lver)
 - Fix: gRPC `authenticate()` now returns an empty token (instead of throwing) when authentication is not enabled, matching the REST behavior (`src/Services/EtcdAuthGrpc.php`) (@s1lver)
 - Enh: Added typed response objects for the `deleteRange`, `txn`, auth, cluster, maintenance and lease domains (`src/Responses/`); array-typed responses are replaced with `\Yii2\Extensions\Etcd\Responses\*Response` instances exposing public properties (e.g. `$result->deleted`, `$grant->ID`) (@s1lver)
+- Enh: Response objects are `readonly` classes — their properties cannot be mutated after construction (`src/Responses/`) (@s1lver)
 - Enh: Token caching via `AuthTokenProvider` (`src/Services/AuthTokenProvider.php`): the auth token is fetched once and reused for `ttl` (default 300) seconds by both the REST and gRPC paths instead of being re-authenticated on every request (@s1lver)
+- Enh: `AlarmAction`, `AlarmType`, `DowngradeAction` and `PermissionType` are now backed enums; `alarm()`, `downgrade()` and `roleGrantPermission()` parameters are type-hinted with them (breaking change: pass enum cases instead of strings, e.g. `AlarmAction::GET`) (@s1lver)
+- Enh: Added `#[Override]` attributes to all interface implementations and `private(set)` visibility to connection configuration, preventing accidental mutation after construction (@s1lver)
+- Enh: Tests use `array_find()` and first-class callable syntax (`strval(...)`) and named arguments for long option lists (`txn()`, `roleGrantPermission()`, `memberAdd()`, `userAdd()`) (@s1lver)
 
 
 ## 1.1.0 (2023-05-25)

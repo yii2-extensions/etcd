@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Yii2\Extensions\Etcd\Responses;
 
-final class DeleteRangeResponse
+final readonly class DeleteRangeResponse
 {
     /** @var array<string, mixed> */
-    public array $header = [];
+    public readonly array $header;
 
-    public int $deleted = 0;
+    public readonly int $deleted;
 
     /** @var array<int, array<string, mixed>> */
-    public array $prevKvs = [];
+    public readonly array $prevKvs;
 
     /**
      * @param array<string, mixed> $data

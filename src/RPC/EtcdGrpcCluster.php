@@ -28,6 +28,7 @@ final class EtcdGrpcCluster extends AbstractEtcdGrpcService implements EtcdClust
         return $this->client ??= new ClusterClient($this->connection->host, $this->getConnectionOptions());
     }
 
+    #[\Override]
     public function memberAdd(array $peerUrls, bool $isLearner = false): MemberAddResponse
     {
         $request = new MemberAddRequest();
@@ -44,6 +45,7 @@ final class EtcdGrpcCluster extends AbstractEtcdGrpcService implements EtcdClust
         ]);
     }
 
+    #[\Override]
     public function memberRemove(int|string $id): MemberRemoveResponse
     {
         $request = new MemberRemoveRequest();
@@ -58,6 +60,7 @@ final class EtcdGrpcCluster extends AbstractEtcdGrpcService implements EtcdClust
         ]);
     }
 
+    #[\Override]
     public function memberUpdate(int|string $id, array $peerUrls): MemberUpdateResponse
     {
         $request = new MemberUpdateRequest();
@@ -73,6 +76,7 @@ final class EtcdGrpcCluster extends AbstractEtcdGrpcService implements EtcdClust
         ]);
     }
 
+    #[\Override]
     public function memberList(bool $linearizable = false): MemberListResponse
     {
         $request = new MemberListRequest();
@@ -87,6 +91,7 @@ final class EtcdGrpcCluster extends AbstractEtcdGrpcService implements EtcdClust
         ]);
     }
 
+    #[\Override]
     public function memberPromote(int|string $id): MemberPromoteResponse
     {
         $request = new MemberPromoteRequest();

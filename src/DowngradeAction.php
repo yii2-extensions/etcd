@@ -7,11 +7,9 @@ namespace Yii2\Extensions\Etcd;
 /**
  * Downgrade actions (matches `etcdserverpb.DowngradeRequest.DowngradeAction`)
  */
-final class DowngradeAction
+enum DowngradeAction: string
 {
-    public const string VALIDATE = 'VALIDATE';
-
-    public const string ENABLE = 'ENABLE';
-
-    public const string CANCEL = 'CANCEL';
+    case VALIDATE = 'VALIDATE';
+    case ENABLE = 'ENABLE';
+    case CANCEL = 'CANCEL';
 }

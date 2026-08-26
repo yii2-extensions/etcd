@@ -7,11 +7,9 @@ namespace Yii2\Extensions\Etcd;
 /**
  * Alarm types (matches `etcdserverpb.AlarmType`)
  */
-final class AlarmType
+enum AlarmType: string
 {
-    public const string NONE = 'NONE';
-
-    public const string NOSPACE = 'NOSPACE';
-
-    public const string CORRUPT = 'CORRUPT';
+    case NONE = 'NONE';
+    case NOSPACE = 'NOSPACE';
+    case CORRUPT = 'CORRUPT';
 }

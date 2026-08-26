@@ -85,10 +85,8 @@ interface EtcdAuthServiceInterface extends EtcdAuthInterface
 
     /**
      * Grants a permission of a specified key or range to a specified role.
-     *
-     * @param string $permType one of {@see PermissionType} values
      */
-    public function roleGrantPermission(string $name, string $permType, string $key, string $rangeEnd = ''): bool;
+    public function roleGrantPermission(string $name, PermissionType $permType, string $key, string $rangeEnd = ''): bool;
 
     /**
      * Revokes a key or range permission of a specified role.
