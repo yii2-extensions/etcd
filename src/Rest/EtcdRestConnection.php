@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yii2\Extensions\Etcd\Rest;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
+use GuzzleHttp\TransportSharing;
 use Yii2\Extensions\Etcd\EtcdAuthServiceInterface;
 use Yii2\Extensions\Etcd\EtcdClusterServiceInterface;
 use Yii2\Extensions\Etcd\EtcdConnectionInterface;
@@ -36,6 +38,15 @@ final class EtcdRestConnection implements EtcdConnectionInterface
         $this->host = $host;
         $this->user = $user;
         $this->password = $password;
+
+        if (!array_key_exists('transport_sharing', $clientOptions)) {
+            $clientOptions['transport_sharing'] = TransportSharing::PERSISTENT_PREFER;
+        }
+
+        if (!array_key_exists(RequestOptions::EXPECT, $clientOptions)) {
+            $clientOptions[RequestOptions::EXPECT] = false;
+        }
+
         $this->client = new Client($clientOptions);
     }
 

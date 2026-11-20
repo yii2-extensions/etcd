@@ -31,18 +31,25 @@ abstract class AbstractEtcdGrpcService
      */
     protected function getConnectionOptions(): array
     {
-        return [
+        $options = [
             'credentials' => ChannelCredentials::createInsecure(),
-            'update_metadata' => function ($metaData) {
-                $token = $this->tokenProvider()->authenticate();
-
-                if ('' !== $token) {
-                    $metaData['Authorization'] = [$token];
-                }
-
-                return $metaData;
-            },
         ];
+
+        if ('' === $this->connection->user) {
+            return $options;
+        }
+
+        $options['update_metadata'] = function ($metaData) {
+            $token = $this->tokenProvider()->authenticate();
+
+            if ('' !== $token) {
+                $metaData['Authorization'] = [$token];
+            }
+
+            return $metaData;
+        };
+
+        return $options;
     }
 
     protected function tokenProvider(): AuthTokenProvider

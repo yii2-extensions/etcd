@@ -21,6 +21,9 @@ use Yii2\Extensions\Etcd\Responses\LeaseTimeToLiveResponse;
 final class EtcdGrpcLease extends AbstractEtcdGrpcService implements EtcdLeaseServiceInterface
 {
     private ?LeaseClient $client = null;
+    private ?LeaseGrantRequest $grantRequest = null;
+    private ?LeaseRevokeRequest $revokeRequest = null;
+    private ?LeaseTimeToLiveRequest $ttlRequest = null;
 
     private function getClient(): LeaseClient
     {
@@ -30,7 +33,7 @@ final class EtcdGrpcLease extends AbstractEtcdGrpcService implements EtcdLeaseSe
     #[\Override]
     public function leaseGrant(int $ttl, int $id = 0): LeaseGrantResponse
     {
-        $request = new LeaseGrantRequest();
+        $request = $this->grantRequest ??= new LeaseGrantRequest();
         $request->setTTL($ttl);
         $request->setID($id);
 
@@ -48,7 +51,7 @@ final class EtcdGrpcLease extends AbstractEtcdGrpcService implements EtcdLeaseSe
     #[\Override]
     public function leaseRevoke(int $id): bool
     {
-        $request = new LeaseRevokeRequest();
+        $request = $this->revokeRequest ??= new LeaseRevokeRequest();
         $request->setID($id);
 
         $this->wait($this->getClient()->LeaseRevoke($request));
@@ -59,7 +62,7 @@ final class EtcdGrpcLease extends AbstractEtcdGrpcService implements EtcdLeaseSe
     #[\Override]
     public function leaseTimeToLive(int $id, bool $keys = false): LeaseTimeToLiveResponse
     {
-        $request = new LeaseTimeToLiveRequest();
+        $request = $this->ttlRequest ??= new LeaseTimeToLiveRequest();
         $request->setID($id);
         $request->setKeys($keys);
 
