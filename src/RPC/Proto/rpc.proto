@@ -1202,11 +1202,9 @@ message AuthRoleAddResponse {
 }
 
 message AuthRoleGetResponse {
-  option (versionpb.etcd_version_msg) = "3.0";
+  ResponseHeader header = 1 [(versionpb.etcd_version_field)="3.0"];
 
-  ResponseHeader header = 1;
-
-  repeated authpb.Permission perm = 2;
+  repeated authpb.Permission perm = 2 [(versionpb.etcd_version_field)="3.0"];
 }
 
 message AuthRoleListResponse {

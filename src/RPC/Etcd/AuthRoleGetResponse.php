@@ -15,11 +15,11 @@ use Google\Protobuf\RepeatedField;
 class AuthRoleGetResponse extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>.etcdserverpb.ResponseHeader header = 1;</code>
+     * Generated from protobuf field <code>.etcdserverpb.ResponseHeader header = 1 [(.versionpb.etcd_version_field) = "3.0"];</code>
      */
     protected $header = null;
     /**
-     * Generated from protobuf field <code>repeated .authpb.Permission perm = 2;</code>
+     * Generated from protobuf field <code>repeated .authpb.Permission perm = 2 [(.versionpb.etcd_version_field) = "3.0"];</code>
      */
     private $perm;
 
@@ -39,7 +39,7 @@ class AuthRoleGetResponse extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>.etcdserverpb.ResponseHeader header = 1;</code>
+     * Generated from protobuf field <code>.etcdserverpb.ResponseHeader header = 1 [(.versionpb.etcd_version_field) = "3.0"];</code>
      * @return \Etcd\ResponseHeader|null
      */
     public function getHeader()
@@ -58,7 +58,7 @@ class AuthRoleGetResponse extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>.etcdserverpb.ResponseHeader header = 1;</code>
+     * Generated from protobuf field <code>.etcdserverpb.ResponseHeader header = 1 [(.versionpb.etcd_version_field) = "3.0"];</code>
      * @param \Etcd\ResponseHeader $var
      * @return $this
      */
@@ -71,7 +71,7 @@ class AuthRoleGetResponse extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .authpb.Permission perm = 2;</code>
+     * Generated from protobuf field <code>repeated .authpb.Permission perm = 2 [(.versionpb.etcd_version_field) = "3.0"];</code>
      * @return RepeatedField<\Etcd\Permission>
      */
     public function getPerm()
@@ -80,7 +80,7 @@ class AuthRoleGetResponse extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .authpb.Permission perm = 2;</code>
+     * Generated from protobuf field <code>repeated .authpb.Permission perm = 2 [(.versionpb.etcd_version_field) = "3.0"];</code>
      * @param \Etcd\Permission[] $var
      * @return $this
      */
