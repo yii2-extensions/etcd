@@ -11,6 +11,9 @@
 <!-- markdownlint-enable MD041 -->
 
 <p align="center">
+    <a href="https://packagist.org/packages/s1lver/yii2-etcd" target="_blank">
+        <img src="https://img.shields.io/packagist/dt/s1lver/yii2-etcd.svg?style=for-the-badge&logo=composer&logoColor=white&label=Downloads" alt="Downloads">
+    </a>
     <a href="https://github.com/yii2-extensions/etcd/actions/workflows/build.yml" target="_blank">
         <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/etcd/build.yml?style=for-the-badge&logo=github&label=PHPUnit" alt="PHPUnit">
     </a>
