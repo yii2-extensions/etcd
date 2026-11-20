@@ -33,7 +33,6 @@ https://etcd.io
 ## Required
 
 - PHP: >= 8.5
-- `grpc`, `protobuf` - for RPC
 
 ## Install
 
@@ -49,9 +48,9 @@ or add
 
 to the require section of your composer.json file.
 
-## Supported etcd API version
+## Supported etcd version
 
-- v3
+- etcd >= 3.7 (API v3)
 
 ## Supported etcd methods
 
@@ -106,7 +105,7 @@ Configure
 $config = [
     'components' => [
         'etcd' => [
-            'class' => \Yii2\Extensions\Etcd::class,
+            'class' => \Yii2\Extensions\Etcd\Etcd::class,
             'host' => 'etcd:2379',
             'user' => 'username',
             'password' => 'password',
@@ -127,7 +126,7 @@ Get etcd version
 ```php
 Yii::$app->etcd->version;
 
-// {"etcdserver":"3.5.8","etcdcluster":"3.5.0"}
+// {"etcdserver":"3.7.4","etcdcluster":"3.7.0","storage":"3.7.0"}
 ```
 
 ### Domain services
@@ -187,7 +186,7 @@ $config = [
         'etcd' => [
             'class' => \Yii2\Extensions\Etcd\Etcd::class,
             ...
-            'protocol' => '\Yii2\Extensions\Etcd\EtcdProtocol::GRPC', // Default value \Yii2\Extensions\Etcd\EtcdProtocol::HTTP
+            'protocol' => \Yii2\Extensions\Etcd\EtcdProtocol::GRPC, // Default value \Yii2\Extensions\Etcd\EtcdProtocol::HTTP
         ],
     ],
 ];
