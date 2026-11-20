@@ -8,8 +8,8 @@
         "php": ">=8.5",
         "ext-curl": "*",
         "ext-grpc": "*",
-        "guzzlehttp/guzzle": "^8.0",
-        "grpc/grpc": "^1.82.0",
+        "guzzlehttp/guzzle": "^8.5",
+        "grpc/grpc": "^1.85.0",
         "google/protobuf": "^v5.36.0",
         "yiisoft/yii2": "^2.0.55"
     },

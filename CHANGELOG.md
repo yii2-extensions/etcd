@@ -2,6 +2,9 @@
 
 ## 2.1.0 (Under development)
 
+- Enh : Bump the composer-dependencies `guzzlehttp/guzzle` to `8.5.0` (@s1lver)
+- Enh : Bump the composer-dependencies `grpc/grpc` to `1.85.0` (@s1lver)
+
 
 ## 2.0.0 (2026-10-20)
 
