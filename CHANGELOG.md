@@ -1,6 +1,9 @@
 # Changelog yii2 etcd component
 
-## 2.0.0 (Under development)
+## 2.1.0 (Under development)
+
+
+## 2.0.0 (2026-10-20)
 
 - Enh: Minimum `PHP` version raised to `8.5` (@s1lver)
 - Enh: Minimum `Yii2` version raised to `2.0.55` (@s1lver)
