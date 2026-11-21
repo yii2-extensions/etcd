@@ -1,7 +1,7 @@
 # This is the configuration file for the etcd server.
 
 # Human-readable name for this member.
-name: 'default'
+name: "default"
 
 # Path to the data directory.
 data-dir:
@@ -49,7 +49,7 @@ advertise-client-urls: http://etcd:2379
 discovery:
 
 # Valid values include 'exit', 'proxy'
-discovery-fallback: 'proxy'
+discovery-fallback: "proxy"
 
 # HTTP proxy to use for traffic to discovery service.
 discovery-proxy:
@@ -58,13 +58,13 @@ discovery-proxy:
 discovery-srv:
 
 # Initial cluster configuration for bootstrapping.
-initial-cluster: 'default=http://etcd:2380'
+initial-cluster: "default=http://etcd:2380"
 
 # Initial cluster token for the etcd cluster during bootstrap.
-initial-cluster-token: 'etcd-cluster'
+initial-cluster-token: "etcd-cluster"
 
 # Initial cluster state ('new' or 'existing').
-initial-cluster-state: 'new'
+initial-cluster-state: "new"
 
 # Reject reconfiguration requests that would cause quorum loss.
 strict-reconfig-check: false
@@ -73,7 +73,7 @@ strict-reconfig-check: false
 enable-pprof: true
 
 # Valid values include 'on', 'readonly', 'off'
-proxy: 'off'
+proxy: "off"
 
 # Time (in milliseconds) an endpoint will be held in a failed state.
 proxy-failure-wait: 5000
@@ -140,7 +140,5 @@ auto-compaction-mode: periodic
 auto-compaction-retention: "1"
 
 # Limit etcd to a specific set of tls cipher suites
-cipher-suites: [
-  TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-  TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-]
+cipher-suites:
+  [TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384]

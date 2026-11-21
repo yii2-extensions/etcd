@@ -1,9 +1,37 @@
-# Autodetect text files
+# autodetect text files
 * text=auto eol=lf
 
-# Ignore some meta files when creating an archive of this repository
-.*                      export-ignore
-.yml                    export-ignore
-/Makefile               export-ignore
+# definitively text files
+*.json  text
+*.md    text
+*.neon  text
+*.php   text
+*.proto text
+*.yml   text
+
+# exclude files from the archive
+/.editorconfig          export-ignore
+/.env                   export-ignore
+/.gitattributes         export-ignore
+/.github                export-ignore
+/.gitignore             export-ignore
+/.idea                  export-ignore
+/.opencode              export-ignore
+/.phpunit.result.cache  export-ignore
+/.prettierignore        export-ignore
+/.prettierrc.json       export-ignore
+/compose.yml            export-ignore
+/composer.lock          export-ignore
 /Dockerfile             export-ignore
+/internal               export-ignore
+/Makefile               export-ignore
+/phpcs.xml.dist         export-ignore
+/phpstan*.neon          export-ignore
+/phpunit.xml.dist       export-ignore
+/support                export-ignore
 /tests                  export-ignore
+/vendor                 export-ignore
+
+# avoid merge conflicts in CHANGELOG
+# https://about.gitlab.com/2015/02/10/gitlab-reduced-merge-conflicts-by-90-percent-with-changelog-placeholders/
+/CHANGELOG.md merge=union

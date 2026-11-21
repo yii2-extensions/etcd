@@ -1,5 +1,4 @@
 ---
-
 services:
   php:
     container_name: etcd-php
@@ -24,8 +23,8 @@ services:
       - ALLOW_NONE_AUTHENTICATION=yes
     command: /usr/local/bin/etcd --config-file=/opt/etcd/conf/etcd.conf.yml
     ports:
-      - '${ETCD_PEER_PORT:-2379}:2379'
-      - '${ETCD_CLIENT_PORT:-2380}:2380'
+      - "${ETCD_PEER_PORT:-2379}:2379"
+      - "${ETCD_CLIENT_PORT:-2380}:2380"
     volumes:
       - ${ROOT_PATH:-.}/etcd.conf.yml:/opt/etcd/conf/etcd.conf.yml
     networks:
@@ -37,4 +36,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: '${DOCKER_SUBNET:-192.168.125.0/28}'
+        - subnet: "${DOCKER_SUBNET:-192.168.125.0/28}"

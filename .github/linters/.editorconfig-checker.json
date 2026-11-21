@@ -1,0 +1,13 @@
+{
+    "Exclude": [
+        "^\\.idea/",
+        "^\\.opencode/",
+        "^composer\\.lock$",
+        "^internal/",
+        "^phpstan-baseline\\.neon$",
+        "^src/RPC/Etcd/",
+        "^src/RPC/GPBMetadata/",
+        "^src/RPC/Proto/",
+        "^vendor/"
+    ]
+}

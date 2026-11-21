@@ -1,28 +1,22 @@
 ---
+on:
+  pull_request: &ignore-paths
+    paths-ignore:
+      - ".gitattributes"
+      - ".gitignore"
+      - "CHANGELOG.md"
+      - "README.md"
+
+  push: *ignore-paths
 
 name: static analysis
 
 permissions:
   contents: read
 
-on:
-  pull_request: &ignore-paths
-    paths-ignore:
-      - '.github/CONTRIBUTING.md'
-      - '.github/FUNDING.yml'
-      - '.github/SECURITY.md'
-      - 'README.md'
-      - 'CHANGELOG.md'
-      - 'LICENSE.md'
-      - 'UPGRADE.md'
-      - '.gitignore'
-      - '.gitattributes'
-      - '.editorconfig'
-
-  push: *ignore-paths
-
 jobs:
   phpstan:
-    uses: yii2-framework/actions/.github/workflows/phpstan.yml@7a2d60325d59c5c9377fd445c912f2f1bfacf9d9 # v2.0.2
+    uses: yii2-framework/actions/.github/workflows/phpstan.yml@d567d034022e972af3a14f4740d98b46e56ba593 # v2.0.4
     with:
-      extensions: 'grpc, protobuf'
+      ignore-platform-reqs-php-version: "[8.6]"
+      extensions: grpc, protobuf

@@ -1,0 +1,2 @@
+[codespell]
+skip = ./.git,./.idea/*,./.opencode/*,./composer.lock,./internal/*,./src/RPC/Etcd/*,./src/RPC/GPBMetadata/*,./src/RPC/Proto/*,./vendor/*
