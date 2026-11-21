@@ -1,0 +1,5 @@
+# Dependencies.
+vendor/**
+
+# Private maintainer files.
+internal/**

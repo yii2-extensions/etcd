@@ -2,16 +2,10 @@
 on:
   pull_request: &ignore-paths
     paths-ignore:
-      - '.github/CONTRIBUTING.md'
-      - '.github/FUNDING.yml'
-      - '.github/SECURITY.md'
-      - 'README.md'
-      - 'CHANGELOG.md'
-      - 'LICENSE.md'
-      - 'UPGRADE.md'
-      - '.gitignore'
-      - '.gitattributes'
-      - '.editorconfig'
+      - ".gitattributes"
+      - ".gitignore"
+      - "CHANGELOG.md"
+      - "README.md"
 
   push: *ignore-paths
 
@@ -22,10 +16,9 @@ permissions:
 
 jobs:
   phpunit:
-    uses: yii2-framework/actions/.github/workflows/phpunit.yml@7a2d60325d59c5c9377fd445c912f2f1bfacf9d9 # v2.0.2
+    uses: yii2-framework/actions/.github/workflows/phpunit.yml@d567d034022e972af3a14f4740d98b46e56ba593 # v2.0.4
     with:
-      php-version: '["8.5"]'
-      extensions: 'grpc'
+      extensions: "grpc"
       hook: |
         set -euo pipefail
         ETCD_VERSION="3.7.4"
@@ -54,5 +47,7 @@ jobs:
         cat "$RUNNER_TEMP/etcd.log" >&2
         echo "etcd failed to start" >&2
         exit 1
+      ignore-platform-reqs-php-version: "[8.6]"
+      php-version: "[8.5, 8.6]"
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

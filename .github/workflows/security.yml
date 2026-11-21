@@ -1,0 +1,17 @@
+---
+on:
+  - pull_request
+  - push
+
+name: security
+
+permissions:
+  contents: read
+
+jobs:
+  security:
+    uses: yii2-framework/actions/.github/workflows/security.yml@d567d034022e972af3a14f4740d98b46e56ba593 # v2.0.4
+    permissions:
+      contents: read
+    secrets:
+      GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}

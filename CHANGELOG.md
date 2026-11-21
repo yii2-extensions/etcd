@@ -6,7 +6,6 @@
 - Enh : Bump the composer-dependencies `grpc/grpc` to `1.85.0` (@s1lver)
 - Enh : Reuse the REST connection across `Etcd` instances, skip `Expect: 100-continue`, and avoid per-call gRPC metadata and request allocation when it does not change the result (@s1lver)
 
-
 ## 2.0.0 (2026-10-20)
 
 - Enh: Minimum `PHP` version raised to `8.5` (@s1lver)
@@ -34,7 +33,6 @@
 - Enh: `AlarmAction`, `AlarmType`, `DowngradeAction` and `PermissionType` are now backed enums; `alarm()`, `downgrade()` and `roleGrantPermission()` parameters are type-hinted with them (breaking change: pass enum cases instead of strings, e.g. `AlarmAction::GET`) (@s1lver)
 - Enh: Added `#[Override]` attributes to all interface implementations and `private(set)` visibility to connection configuration, preventing accidental mutation after construction (@s1lver)
 - Enh: Tests use `array_find()` and first-class callable syntax (`strval(...)`) and named arguments for long option lists (`txn()`, `roleGrantPermission()`, `memberAdd()`, `userAdd()`) (@s1lver)
-
 
 ## 1.1.0 (2023-05-25)
 

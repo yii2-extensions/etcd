@@ -3,7 +3,7 @@
     <picture>
         <source media="(prefers-color-scheme: dark)" srcset="https://www.yiiframework.com/image/design/logo/yii3_full_for_dark.svg">
         <source media="(prefers-color-scheme: light)" srcset="https://www.yiiframework.com/image/design/logo/yii3_full_for_light.svg">
-        <img src="https://www.yiiframework.com/image/design/logo/yii3_full_for_dark.svg" alt="Yii Framework" width="80%">
+        <img src="https://www.yiiframework.com/image/design/logo/yii3_full_for_light.svg" alt="Yii Framework" width="80%">
     </picture>
     <h1 align="center">etcd</h1>
     <br>
@@ -11,38 +11,44 @@
 <!-- markdownlint-enable MD041 -->
 
 <p align="center">
-    <a href="https://packagist.org/packages/s1lver/yii2-etcd" target="_blank">
-        <img src="https://img.shields.io/packagist/dt/s1lver/yii2-etcd.svg?style=for-the-badge&logo=composer&logoColor=white&label=Downloads" alt="Downloads">
-    </a>
     <a href="https://github.com/yii2-extensions/etcd/actions/workflows/build.yml" target="_blank">
-        <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/etcd/build.yml?style=for-the-badge&logo=github&label=PHPUnit" alt="PHPUnit">
+        <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/etcd/build.yml?style=for-the-badge&label=PHPUnit&logo=github" alt="PHPUnit">
     </a>
     <a href="https://codecov.io/github/yii2-extensions/etcd" target="_blank">
-        <img src="https://img.shields.io/codecov/c/github/yii2-extensions/etcd.svg?style=for-the-badge&logo=codecov&logoColor=white&label=Coverage" alt="CodeCoverage">
+        <img src="https://img.shields.io/codecov/c/github/yii2-extensions/etcd.svg?style=for-the-badge&logo=codecov&logoColor=white&label=Coverage" alt="Coverage">
     </a>
     <a href="https://github.com/yii2-extensions/etcd/actions/workflows/static.yml" target="_blank">
-        <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/etcd/static.yml?style=for-the-badge&logo=github&label=PHPStan" alt="PHPStan">
+        <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/etcd/static.yml?style=for-the-badge&label=PHPStan&logo=github" alt="PHPStan">
+    </a>
+    <a href="https://packagist.org/packages/yii2-extensions/etcd" target="_blank">
+        <img src="https://img.shields.io/packagist/dt/yii2-extensions/etcd.svg?style=for-the-badge&logo=composer&logoColor=white&label=Downloads" alt="Downloads">
     </a>
 </p>
 
+<p align="center">
+    <strong>Yii2 component for the <a href="https://etcd.io">etcd</a> v3 API</strong><br>
+    <em>KV, Auth, Cluster, Maintenance and Lease services over the HTTP/JSON gateway or gRPC</em>
+</p>
 
-Interaction component with `etcd` (A distributed, reliable key-value store for the most critical data of a distributed system) for `Yii2 Framework`.
+## Quick start
 
-https://etcd.io
+### Requirements
 
-## Required
+- An etcd server that exposes the v3 API.
+- The `curl` and `grpc` PHP extensions, both required by `composer.json`.
+- The `protobuf` PHP extension is optional; without it, the pure PHP `google/protobuf` runtime is used.
 
 - PHP: >= 8.5
 
 ## Install
 
 ```bash
-composer require yii2-extensions/etcd "^2.0.0"
+composer require yii2-extensions/etcd:^2.0
 ```
 
 or add
 
-```
+```json
 "yii2-extensions/etcd": "^2.0.0"
 ```
 
@@ -55,9 +61,11 @@ to the require section of your composer.json file.
 ## Supported etcd methods
 
 ### Main
+
 - `version`
 
 ### KV
+
 - `range` (`getKey`, `getRange`)
 - `put`
 - `deleteRange`
@@ -65,6 +73,7 @@ to the require section of your composer.json file.
 - `compact`
 
 ### Auth
+
 - `authenticate`
 - `enable`
 - `disable`
@@ -75,6 +84,7 @@ to the require section of your composer.json file.
 - `roleGrantPermission`, `roleRevokePermission`
 
 ### Cluster
+
 - `memberAdd`
 - `memberRemove`
 - `memberUpdate`
@@ -82,6 +92,7 @@ to the require section of your composer.json file.
 - `memberPromote`
 
 ### Maintenance
+
 - `alarm`
 - `status`
 - `defragment`
@@ -91,11 +102,11 @@ to the require section of your composer.json file.
 - `downgrade`
 
 ### Lease
+
 - `grant`
 - `revoke`
 - `timeToLive`
 - `leases`
-
 
 ## How to use
 
@@ -114,14 +125,17 @@ $config = [
 ];
 ```
 
-Get key value
+### Basic usage
+
+Get a key value:
+
 ```php
 Yii::$app->etcd->getKv()->getKey('hello')->firstKeyValue;
 
 // Hello
 ```
 
-Get etcd version
+Get the etcd version:
 
 ```php
 Yii::$app->etcd->version;
@@ -129,11 +143,15 @@ Yii::$app->etcd->version;
 // {"etcdserver":"3.7.4","etcdcluster":"3.7.0","storage":"3.7.0"}
 ```
 
+## Usage
+
 ### Domain services
 
 Since `2.0.0` all etcd API methods are grouped by domain and reached through a sub-service:
 
 ```php
+use Yii2\Extensions\Etcd\PermissionType;
+
 // KV
 Yii::$app->etcd->getKv()->put('foo', 'bar');
 Yii::$app->etcd->getKv()->getKey('foo')->firstKeyValue;
@@ -161,10 +179,10 @@ Yii::$app->etcd->getLease()->leaseRevoke($id);
 
 ### Typed responses
 
-Since `2.0.0` the methods that return a non-scalar result return a typed response
-object from `\Yii2\Extensions\Etcd\Responses\` (e.g. `DeleteRangeResponse`,
-`TxnResponse`, `StatusResponse`, `LeaseGrantResponse`) instead of a plain array.
-Nested structures stay arrays, top-level fields are exposed as properties:
+Since `2.0.0` the methods that return a non-scalar result return a typed response object from
+`\Yii2\Extensions\Etcd\Responses\` (for example `DeleteRangeResponse`, `TxnResponse`, `StatusResponse`,
+`LeaseGrantResponse`) instead of a plain array. Nested structures stay arrays, top-level fields are exposed as
+properties:
 
 ```php
 $result = Yii::$app->etcd->getKv()->deleteRange('foo', 'fop');
@@ -175,10 +193,13 @@ $grant = Yii::$app->etcd->getLease()->leaseGrant(3600);
 $grant->ID;            // new lease ID
 ```
 
-### Switch between supported protocol
+### Switch between supported protocols
 
-> etcd v3 uses gRPC for its messaging protocol. For languages with no gRPC support, etcd provides a JSON gRPC gateway. This gateway serves a RESTful proxy that translates HTTP/JSON requests into gRPC messages.
+> etcd v3 uses gRPC for its messaging protocol. For languages with no gRPC support, etcd provides a JSON gRPC gateway.
+> This gateway serves a RESTful proxy that translates HTTP/JSON requests into gRPC messages.
 
+The component uses the HTTP/JSON gateway by default (`EtcdProtocol::HTTP`). Set `protocol` to `EtcdProtocol::GRPC` to
+use gRPC:
 
 ```php
 $config = [
@@ -191,3 +212,22 @@ $config = [
     ],
 ];
 ```
+
+## Package information
+
+[![PHP](https://img.shields.io/badge/%3E%3D8.5-777BB4.svg?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/releases/8.5/en.php)
+[![Yii 2.0.55+](https://img.shields.io/badge/%3E%3D2.0.55-0073AA.svg?style=for-the-badge&logo=yii&logoColor=white)](https://github.com/yiisoft/yii2/releases/tag/2.0.55)
+
+## Project status
+
+[![PHPStan Level 8](https://img.shields.io/badge/PHPStan-Level%208-4F5D95.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/yii2-extensions/etcd/actions/workflows/static.yml)
+[![Quality](https://img.shields.io/github/actions/workflow/status/yii2-extensions/etcd/quality.yml?style=for-the-badge&label=Quality&logo=github)](https://github.com/yii2-extensions/etcd/actions/workflows/quality.yml)
+
+## Security
+
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/yii2-extensions/etcd/badge?style=for-the-badge)](https://scorecard.dev/viewer/?uri=github.com/yii2-extensions/etcd)
+[![Zizmor](https://img.shields.io/github/actions/workflow/status/yii2-extensions/etcd/security.yml?style=for-the-badge&label=Zizmor&logo=github)](https://github.com/yii2-extensions/etcd/actions/workflows/security.yml)
+
+## License
+
+[![License](https://img.shields.io/badge/License-BSD--3--Clause-brightgreen.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white&labelColor=555555)](LICENSE)

@@ -1,6 +1,18 @@
-.idea
-.opencode
-vendor
+# composer
 composer.lock
+vendor
 
+# docker compose environment (if present)
+.env
+
+# opencode config (if present)
+.opencode
+
+# phpstorm project (if present)
+.idea
+
+# phpunit (if present)
 .phpunit.result.cache
+
+# private maintainer files (if present)
+/internal/
