@@ -208,56 +208,6 @@ $config = [
 ];
 ```
 
-## Supported etcd methods
-
-The component targets the etcd v3 API. Each group is available through the sub-service named in parentheses.
-
-### Main (component)
-
-- `getVersion()` (`version` property)
-
-### KV (`getKv()`)
-
-- `getKey()`, `getRange()` (etcd `Range`)
-- `put()`
-- `deleteRange()`
-- `txn()`
-- `compact()`
-
-### Auth (`getAuth()`)
-
-- `authenticate()`
-- `authEnable()`, `authDisable()`, `authStatus()`
-- `userAdd()`, `userGet()`, `userList()`, `userDelete()`, `userChangePassword()`
-- `userGrantRole()`, `userRevokeRole()`
-- `roleAdd()`, `roleGet()`, `roleList()`, `roleDelete()`
-- `roleGrantPermission()`, `roleRevokePermission()`
-
-### Cluster (`getCluster()`)
-
-- `memberAdd()`
-- `memberRemove()`
-- `memberUpdate()`
-- `memberList()`
-- `memberPromote()`
-
-### Maintenance (`getMaintenance()`)
-
-- `alarm()`
-- `status()`
-- `defragment()`
-- `hash()`
-- `hashKv()`
-- `moveLeader()`
-- `downgrade()`
-
-### Lease (`getLease()`)
-
-- `leaseGrant()`
-- `leaseRevoke()`
-- `leaseTimeToLive()`
-- `leaseLeases()`
-
 ## Package information
 
 [![PHP](https://img.shields.io/badge/%3E%3D8.5-777BB4.svg?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/releases/8.5/en.php)
