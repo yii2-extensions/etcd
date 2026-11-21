@@ -48,7 +48,7 @@ composer require yii2-extensions/etcd:^2.0
 
 or add
 
-```
+```json
 "yii2-extensions/etcd": "^2.0.0"
 ```
 
