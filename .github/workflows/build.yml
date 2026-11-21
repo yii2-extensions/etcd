@@ -21,7 +21,7 @@ jobs:
       extensions: "grpc"
       hook: |
         set -euo pipefail
-        ETCD_VERSION="3.7.1"
+        ETCD_VERSION="3.7.4"
         if [[ "$RUNNER_OS" == "Linux" ]]; then
           ARCHIVE="etcd-v${ETCD_VERSION}-linux-amd64.tar.gz"
           URL="https://github.com/etcd-io/etcd/releases/download/v${ETCD_VERSION}/${ARCHIVE}"

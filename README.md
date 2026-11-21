@@ -38,13 +38,74 @@
 - The `curl` and `grpc` PHP extensions, both required by `composer.json`.
 - The `protobuf` PHP extension is optional; without it, the pure PHP `google/protobuf` runtime is used.
 
-### Installation
+- PHP: >= 8.5
+
+## Install
 
 ```bash
 composer require yii2-extensions/etcd:^2.0
 ```
 
-### Configuration
+or add
+
+```
+"yii2-extensions/etcd": "^2.0.0"
+```
+
+to the require section of your composer.json file.
+
+## Supported etcd version
+
+- etcd >= 3.7 (API v3)
+
+## Supported etcd methods
+
+### Main
+- `version`
+
+### KV
+- `range` (`getKey`, `getRange`)
+- `put`
+- `deleteRange`
+- `txn`
+- `compact`
+
+### Auth
+- `authenticate`
+- `enable`
+- `disable`
+- `status`
+- `userAdd`, `userGet`, `userList`, `userDelete`, `userChangePassword`
+- `userGrantRole`, `userRevokeRole`
+- `roleAdd`, `roleGet`, `roleList`, `roleDelete`
+- `roleGrantPermission`, `roleRevokePermission`
+
+### Cluster
+- `memberAdd`
+- `memberRemove`
+- `memberUpdate`
+- `memberList`
+- `memberPromote`
+
+### Maintenance
+- `alarm`
+- `status`
+- `defragment`
+- `hash`
+- `hashKv`
+- `moveLeader`
+- `downgrade`
+
+### Lease
+- `grant`
+- `revoke`
+- `timeToLive`
+- `leases`
+
+
+## How to use
+
+Configure
 
 ```php
 $config = [
@@ -74,7 +135,7 @@ Get the etcd version:
 ```php
 Yii::$app->etcd->version;
 
-// {"etcdserver":"3.5.8","etcdcluster":"3.5.0"}
+// {"etcdserver":"3.7.4","etcdcluster":"3.7.0","storage":"3.7.0"}
 ```
 
 ## Usage
@@ -140,8 +201,8 @@ $config = [
     'components' => [
         'etcd' => [
             'class' => \Yii2\Extensions\Etcd\Etcd::class,
-            // ...
-            'protocol' => \Yii2\Extensions\Etcd\EtcdProtocol::GRPC,
+            ...
+            'protocol' => \Yii2\Extensions\Etcd\EtcdProtocol::GRPC, // Default value \Yii2\Extensions\Etcd\EtcdProtocol::HTTP
         ],
     ],
 ];

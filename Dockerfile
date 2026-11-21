@@ -1,12 +1,12 @@
-FROM php:8.5.10-cli-alpine AS etcd-php
+FROM php:8.5.13-cli-alpine AS etcd-php
 
 # Installing the main image packages
 RUN apk add git libzip-dev icu-dev autoconf g++ make linux-headers
 
 # Installing PHP extensions
-RUN docker-php-ext-install zip sockets intl pcntl bcmath
-RUN MAKEFLAGS="-j$(nproc)" yes | pecl install grpc-1.83.1
-RUN MAKEFLAGS="-j$(nproc)" yes | pecl install protobuf xdebug pcov
+RUN docker-php-ext-install zip intl pcntl bcmath
+RUN MAKEFLAGS="-j$(nproc)" yes | pecl install grpc
+RUN MAKEFLAGS="-j$(nproc)" yes | pecl install protobuf xdebug pcov excimer
 RUN docker-php-ext-enable grpc protobuf xdebug pcov
 
 # Installing protoc utils

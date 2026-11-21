@@ -28,6 +28,10 @@ use Yii2\Extensions\Etcd\Responses\TxnResponse;
 final class EtcdGrpcKv extends AbstractEtcdGrpcService implements EtcdKvServiceInterface
 {
     private ?KVClient $client = null;
+    private ?PutRequest $putRequest = null;
+    private ?RangeRequest $keyRequest = null;
+    private ?RangeRequest $rangeRequest = null;
+    private ?DeleteRangeRequest $deleteRequest = null;
 
     private function getClient(): KVClient
     {
@@ -37,7 +41,7 @@ final class EtcdGrpcKv extends AbstractEtcdGrpcService implements EtcdKvServiceI
     #[\Override]
     public function getRange(string $key, string $rangeEnd): RangeResponse
     {
-        $request = new RangeRequest();
+        $request = $this->rangeRequest ??= new RangeRequest();
         $request->setKey($key);
         $request->setRangeEnd($rangeEnd);
 
@@ -50,7 +54,7 @@ final class EtcdGrpcKv extends AbstractEtcdGrpcService implements EtcdKvServiceI
     #[\Override]
     public function getKey(string $key): RangeResponse
     {
-        $request = new RangeRequest();
+        $request = $this->keyRequest ??= new RangeRequest();
         $request->setKey($key);
 
         /** @var EtcdRangeResponse $response */
@@ -62,7 +66,7 @@ final class EtcdGrpcKv extends AbstractEtcdGrpcService implements EtcdKvServiceI
     #[\Override]
     public function put(string $key, string $value): bool
     {
-        $request = new PutRequest();
+        $request = $this->putRequest ??= new PutRequest();
         $request->setKey($key);
         $request->setValue($value);
 
@@ -74,12 +78,9 @@ final class EtcdGrpcKv extends AbstractEtcdGrpcService implements EtcdKvServiceI
     #[\Override]
     public function deleteRange(string $key, string $rangeEnd = ''): DeleteRangeResponse
     {
-        $request = new DeleteRangeRequest();
+        $request = $this->deleteRequest ??= new DeleteRangeRequest();
         $request->setKey($key);
-
-        if ('' !== $rangeEnd) {
-            $request->setRangeEnd($rangeEnd);
-        }
+        $request->setRangeEnd($rangeEnd);
 
         /** @var EtcdDeleteRangeResponse $response */
         $response = $this->wait($this->getClient()->DeleteRange($request));
