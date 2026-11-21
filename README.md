@@ -61,9 +61,11 @@ to the require section of your composer.json file.
 ## Supported etcd methods
 
 ### Main
+
 - `version`
 
 ### KV
+
 - `range` (`getKey`, `getRange`)
 - `put`
 - `deleteRange`
@@ -71,6 +73,7 @@ to the require section of your composer.json file.
 - `compact`
 
 ### Auth
+
 - `authenticate`
 - `enable`
 - `disable`
@@ -81,6 +84,7 @@ to the require section of your composer.json file.
 - `roleGrantPermission`, `roleRevokePermission`
 
 ### Cluster
+
 - `memberAdd`
 - `memberRemove`
 - `memberUpdate`
@@ -88,6 +92,7 @@ to the require section of your composer.json file.
 - `memberPromote`
 
 ### Maintenance
+
 - `alarm`
 - `status`
 - `defragment`
@@ -97,11 +102,11 @@ to the require section of your composer.json file.
 - `downgrade`
 
 ### Lease
+
 - `grant`
 - `revoke`
 - `timeToLive`
 - `leases`
-
 
 ## How to use
 
